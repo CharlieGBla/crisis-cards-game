@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crisis Cards</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Crisis Cards</h1>
+  
+  <!-- Card -->
+  <div id="card" onclick="drawCard()">Click Me!</div>
+  
+  <!-- Popup -->
+  <div id="popup">
+    <div id="popup-content">
+      <p id="popup-text"></p>
+      <button onclick="closePopup()">Close</button>
+    </div>
+  </div>
+  
+  <!-- Sliders -->
+  <div id="sliders">
+    <label for="racism">Racism: <span id="racism-value">50</span></label>
+    <input type="range" id="racism" min="0" max="100" value="50">
+    
+    <label for="economy">Economy: <span id="economy-value">50</span></label>
+    <input type="range" id="economy" min="0" max="100" value="50">
+    
+    <label for="ecology">Ecology: <span id="ecology-value">50</span></label>
+    <input type="range" id="ecology" min="0" max="100" value="50">
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
