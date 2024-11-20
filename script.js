@@ -98,6 +98,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Close the popup
     function closePopup() {
-        popup.classList.add("hidden");
+        popup.style.display = "none";
     }
 });
