@@ -3,53 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Card-Based Game</title>
+    <title>Societal Tensions Game</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Societal Tensions Game</h1>
-    <input type="file" id="file-input" />
-    <div id="game">
+    <header>
+        <h1>Societal Tensions Game</h1>
+    </header>
+    <main>
         <button id="draw-card">Draw Card</button>
+        <p id="message"></p>
+        
         <div id="popup" class="hidden">
-            <p id="card-description"></p>
-            <button id="option1"></button>
-            <button id="option2"></button>
+            <div class="popup-content">
+                <p id="card-description"></p>
+                <div class="popup-options">
+                    <button id="option1"></button>
+                    <button id="option2"></button>
+                </div>
+            </div>
         </div>
+        
         <div id="sliders">
             <div class="slider-container">
-                <label>Agrarian</label>
-                <input type="range" id="agrarian" min="0" max="100" value="50" />
+                <label for="agrarian">Agrarian</label>
+                <input type="range" id="agrarian" min="0" max="100" value="50">
                 <span id="agrarian-value">50</span>
             </div>
             <div class="slider-container">
-                <label>Industry</label>
-                <input type="range" id="industry" min="0" max="100" value="50" />
+                <label for="industry">Industry</label>
+                <input type="range" id="industry" min="0" max="100" value="50">
                 <span id="industry-value">50</span>
             </div>
             <div class="slider-container">
-                <label>Religion</label>
-                <input type="range" id="religion" min="0" max="100" value="50" />
+                <label for="religion">Religion</label>
+                <input type="range" id="religion" min="0" max="100" value="50">
                 <span id="religion-value">50</span>
             </div>
             <div class="slider-container">
-                <label>Officials</label>
-                <input type="range" id="officials" min="0" max="100" value="50" />
+                <label for="officials">Officials</label>
+                <input type="range" id="officials" min="0" max="100" value="50">
                 <span id="officials-value">50</span>
             </div>
             <div class="slider-container">
-                <label>Military</label>
-                <input type="range" id="military" min="0" max="100" value="50" />
-                <span id="military-value">50</span>
+                <label for="education">Education</label>
+                <input type="range" id="education" min="0" max="100" value="50">
+                <span id="education-value">50</span>
             </div>
             <div class="slider-container">
-                <label>Commerce</label>
-                <input type="range" id="commerce" min="0" max="100" value="50" />
+                <label for="commerce">Commerce</label>
+                <input type="range" id="commerce" min="0" max="100" value="50">
                 <span id="commerce-value">50</span>
             </div>
+            <div class="slider-container">
+                <label for="influence">Influence</label>
+                <input type="range" id="influence" min="0" max="100" value="50">
+                <span id="influence-value">50</span>
+            </div>
+            <div class="slider-container">
+                <label for="military">Military</label>
+                <input type="range" id="military" min="0" max="100" value="50">
+                <span id="military-value">50</span>
+            </div>
         </div>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    </main>
     <script src="script.js"></script>
 </body>
 </html>
