@@ -1,38 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Crisis Cards</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card-Based Game</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Crisis Cards</h1>
-  
-  <!-- Card -->
-  <div id="card" onclick="drawCard()">Click Me!</div>
-  
-  <!-- Popup -->
-  <div id="popup">
-    <div id="popup-content">
-      <p id="popup-text"></p>
-      <button onclick="closePopup()">Close</button>
+    <h1>Fascism Simulation Game</h1>
+    <div id="card-container">
+        <button id="draw-card">Draw Card</button>
     </div>
-  </div>
-  <div id="card-container"></div>
 
-  <div id="sliders">
-      <label for="agrarian">Agrarian:</label><input type="range" id="agrarian" min="0" max="100" value="50"><br>
-      <label for="industry">Industry:</label><input type="range" id="industry" min="0" max="100" value="50"><br>
-      <label for="religion">Religion:</label><input type="range" id="religion" min="0" max="100" value="50"><br>
-      <label for="officials">Officials:</label><input type="range" id="officials" min="0" max="100" value="50"><br>
-      <label for="education">Education:</label><input type="range" id="education" min="0" max="100" value="50"><br>
-      <label for="commerce">Commerce:</label><input type="range" id="commerce" min="0" max="100" value="50"><br>
-      <label for="influence">Influence:</label><input type="range" id="influence" min="0" max="100" value="50"><br>
-      <label for="military">Military:</label><input type="range" id="military" min="0" max="100" value="50"><br>
-  </div>
+    <div id="popup" class="hidden">
+        <div class="popup-content">
+            <p id="card-description">Card description will appear here.</p>
+            <button id="option1">Option 1</button>
+            <button id="option2">Option 2</button>
+        </div>
+    </div>
 
-  <script src="script.js"></script>
+    <div id="sliders">
+        <label for="agrarian">Agrarian: <span id="agrarian-value">50</span></label>
+        <input type="range" id="agrarian" min="0" max="100" value="50">
+
+        <label for="industry">Industry: <span id="industry-value">50</span></label>
+        <input type="range" id="industry" min="0" max="100" value="50">
+
+        <label for="religion">Religion: <span id="religion-value">50</span></label>
+        <input type="range" id="religion" min="0" max="100" value="50">
+
+        <label for="officials">Officials: <span id="officials-value">50</span></label>
+        <input type="range" id="officials" min="0" max="100" value="50">
+
+        <label for="education">Education: <span id="education-value">50</span></label>
+        <input type="range" id="education" min="0" max="100" value="50">
+
+        <label for="commerce">Commerce: <span id="commerce-value">50</span></label>
+        <input type="range" id="commerce" min="0" max="100" value="50">
+
+        <label for="influence">Influence: <span id="influence-value">50</span></label>
+        <input type="range" id="influence" min="0" max="100" value="50">
+
+        <label for="military">Military: <span id="military-value">50</span></label>
+        <input type="range" id="military" min="0" max="100" value="50">
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
