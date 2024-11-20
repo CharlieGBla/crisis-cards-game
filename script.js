@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let cards = [];
     let usedCards = new Set();
+    
 
     // Load cards from CSV
     fetch("assets/cards.csv")
@@ -35,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Hide popup initially
     popup.classList.add("hidden");
+    closePopup();
 
     // Draw a card
     drawCardButton.addEventListener("click", () => {
