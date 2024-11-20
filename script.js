@@ -4,6 +4,7 @@ const popup = document.getElementById("popup");
 const cardDescription = document.getElementById("card-description");
 const option1Button = document.getElementById("option1");
 const option2Button = document.getElementById("option2");
+const message = document.getElementById("message");
 
 // Slider Elements
 const sliders = {
@@ -29,6 +30,7 @@ const sliderValues = {
 
 // Card Data
 let cards = [];
+let usedCards = [];
 
 // Functions
 function parseEffects(optionText) {
@@ -46,17 +48,24 @@ function updateSliders(effects) {
         if (sliders[key]) {
             sliders[key].value = Math.max(0, Math.min(100, parseInt(sliders[key].value) + value));
             sliderValues[key].textContent = sliders[key].value;
+
+            if (sliders[key].value === 0) {
+                endGame(false);
+            }
         }
     }
 }
 
 function drawCard() {
     if (cards.length === 0) {
-        alert("No cards loaded yet!");
+        endGame(true);
         return;
     }
 
-    const card = cards[Math.floor(Math.random() * cards.length)];
+    const randomIndex = Math.floor(Math.random() * cards.length);
+    const card = cards.splice(randomIndex, 1)[0];
+    usedCards.push(card);
+
     cardDescription.textContent = card.description;
 
     option1Button.textContent = card.option1.text;
@@ -75,37 +84,40 @@ function drawCard() {
     popup.classList.remove("hidden");
 }
 
-function loadExcel(file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, { type: "array" });
-        const sheetName = workbook.SheetNames[0];
-        const sheet = workbook.Sheets[sheetName];
-        const rows = XLSX.utils.sheet_to_json(sheet);
+function loadCards() {
+    fetch("assets/cards.csv")
+        .then((response) => response.text())
+        .then((data) => {
+            const rows = data.split("\n").slice(1); // Skip the header row
+            cards = rows.map((row) => {
+                const [id, description, option1, option2] = row.split(",");
+                return {
+                    description: description.trim(),
+                    option1: {
+                        text: option1.trim(),
+                        effects: parseEffects(option1),
+                    },
+                    option2: {
+                        text: option2.trim(),
+                        effects: parseEffects(option2),
+                    },
+                };
+            });
+            alert("Cards loaded successfully!");
+        })
+        .catch((err) => {
+            console.error("Error loading cards:", err);
+        });
+}
 
-        cards = rows.map(row => ({
-            description: row.Description,
-            option1: {
-                text: row.Option1,
-                effects: parseEffects(row.Option1),
-            },
-            option2: {
-                text: row.Option2,
-                effects: parseEffects(row.Option2),
-            },
-        }));
-        alert("Cards loaded successfully!");
-    };
-    reader.readAsArrayBuffer(file);
+function endGame(won) {
+    message.textContent = won ? "You win! All cards used!" : "You lose! A slider reached 0.";
+    drawCardButton.disabled = true;
+    popup.classList.add("hidden");
 }
 
 // Event Listeners
 drawCardButton.addEventListener("click", drawCard);
 
-document.getElementById("file-input").addEventListener("change", (event) => {
-    const file = event.target.files[0];
-    if (file) {
-        loadExcel(file);
-    }
-});
+// Load Cards on Page Load
+window.onload = loadCards;
