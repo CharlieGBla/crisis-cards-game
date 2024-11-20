@@ -1,123 +1,100 @@
-// Elements
-const drawCardButton = document.getElementById("draw-card");
-const popup = document.getElementById("popup");
-const cardDescription = document.getElementById("card-description");
-const option1Button = document.getElementById("option1");
-const option2Button = document.getElementById("option2");
-const message = document.getElementById("message");
+document.addEventListener("DOMContentLoaded", () => {
+    const drawCardButton = document.getElementById("draw-card");
+    const popup = document.getElementById("popup");
+    const cardDescription = document.getElementById("card-description");
+    const option1Button = document.getElementById("option1");
+    const option2Button = document.getElementById("option2");
+    const message = document.getElementById("message");
 
-// Slider Elements
-const sliders = {
-    agrarian: document.getElementById("agrarian"),
-    industry: document.getElementById("industry"),
-    religion: document.getElementById("religion"),
-    officials: document.getElementById("officials"),
-    education: document.getElementById("education"),
-    commerce: document.getElementById("commerce"),
-    influence: document.getElementById("influence"),
-    military: document.getElementById("military"),
-};
-const sliderValues = {
-    agrarian: document.getElementById("agrarian-value"),
-    industry: document.getElementById("industry-value"),
-    religion: document.getElementById("religion-value"),
-    officials: document.getElementById("officials-value"),
-    education: document.getElementById("education-value"),
-    commerce: document.getElementById("commerce-value"),
-    influence: document.getElementById("influence-value"),
-    military: document.getElementById("military-value"),
-};
+    // Sliders
+    const sliders = {
+        agrarian: document.getElementById("agrarian"),
+        industry: document.getElementById("industry"),
+        religion: document.getElementById("religion"),
+        officials: document.getElementById("officials"),
+        education: document.getElementById("education"),
+        commerce: document.getElementById("commerce"),
+        influence: document.getElementById("influence"),
+        military: document.getElementById("military"),
+    };
 
-// Card Data
-let cards = [];
-let usedCards = [];
+    let cards = [];
+    let usedCards = new Set();
 
-// Functions
-function parseEffects(optionText) {
-    const effectRegex = /\(([-+]\d+)\s(\w+)\)/;
-    const match = effectRegex.exec(optionText);
-    if (match) {
-        const [, value, category] = match;
-        return { [category.toLowerCase()]: parseInt(value, 10) };
-    }
-    return {};
-}
+    // Load cards from CSV
+    fetch("assets/cards.csv")
+        .then(response => response.text())
+        .then(data => {
+            const rows = data.split("\n").slice(1); // Skip the header row
+            cards = rows.map(row => {
+                const [id, description, option1, option2] = row.split(",");
+                return { id, description, option1, option2 };
+            });
+        })
+        .catch(err => console.error("Error loading cards:", err));
 
-function updateSliders(effects) {
-    for (const [key, value] of Object.entries(effects)) {
-        if (sliders[key]) {
-            sliders[key].value = Math.max(0, Math.min(100, parseInt(sliders[key].value) + value));
-            sliderValues[key].textContent = sliders[key].value;
+    // Hide popup initially
+    popup.classList.add("hidden");
 
-            if (sliders[key].value === 0) {
-                endGame(false);
+    // Draw a card
+    drawCardButton.addEventListener("click", () => {
+        if (cards.length === 0 || usedCards.size === cards.length) {
+            message.textContent = "Game Over! You ran out of cards!";
+            drawCardButton.disabled = true;
+            return;
+        }
+
+        // Get a random card that hasn't been used
+        let randomIndex;
+        do {
+            randomIndex = Math.floor(Math.random() * cards.length);
+        } while (usedCards.has(randomIndex));
+
+        const card = cards[randomIndex];
+        usedCards.add(randomIndex);
+
+        // Update popup content
+        cardDescription.textContent = card.description;
+        option1Button.textContent = card.option1;
+        option2Button.textContent = card.option2;
+
+        // Show the popup
+        popup.classList.remove("hidden");
+
+        // Handle option 1
+        option1Button.onclick = () => {
+            applyEffect(card.option1);
+            closePopup();
+        };
+
+        // Handle option 2
+        option2Button.onclick = () => {
+            applyEffect(card.option2);
+            closePopup();
+        };
+    });
+
+    // Function to apply an effect from an option
+    function applyEffect(effect) {
+        const match = effect.match(/([+-]\d+)\s(\w+)/);
+        if (match) {
+            const [_, value, stat] = match;
+            const slider = sliders[stat.toLowerCase()];
+            if (slider) {
+                slider.value = Math.min(Math.max(parseInt(slider.value) + parseInt(value), 0), 100);
+                document.getElementById(`${stat.toLowerCase()}-value`).textContent = slider.value;
+
+                // Check for losing condition
+                if (slider.value === 0) {
+                    message.textContent = `Game Over! ${stat} has reached 0.`;
+                    drawCardButton.disabled = true;
+                }
             }
         }
     }
-}
 
-function drawCard() {
-    if (cards.length === 0) {
-        endGame(true);
-        return;
+    // Close the popup
+    function closePopup() {
+        popup.classList.add("hidden");
     }
-
-    const randomIndex = Math.floor(Math.random() * cards.length);
-    const card = cards.splice(randomIndex, 1)[0];
-    usedCards.push(card);
-
-    cardDescription.textContent = card.description;
-
-    option1Button.textContent = card.option1.text;
-    option2Button.textContent = card.option2.text;
-
-    option1Button.onclick = () => {
-        updateSliders(card.option1.effects);
-        popup.classList.add("hidden");
-    };
-
-    option2Button.onclick = () => {
-        updateSliders(card.option2.effects);
-        popup.classList.add("hidden");
-    };
-
-    popup.classList.remove("hidden");
-}
-
-function loadCards() {
-    fetch("assets/cards.csv")
-        .then((response) => response.text())
-        .then((data) => {
-            const rows = data.split("\n").slice(1); // Skip the header row
-            cards = rows.map((row) => {
-                const [id, description, option1, option2] = row.split(",");
-                return {
-                    description: description.trim(),
-                    option1: {
-                        text: option1.trim(),
-                        effects: parseEffects(option1),
-                    },
-                    option2: {
-                        text: option2.trim(),
-                        effects: parseEffects(option2),
-                    },
-                };
-            });
-            alert("Cards loaded successfully!");
-        })
-        .catch((err) => {
-            console.error("Error loading cards:", err);
-        });
-}
-
-function endGame(won) {
-    message.textContent = won ? "You win! All cards used!" : "You lose! A slider reached 0.";
-    drawCardButton.disabled = true;
-    popup.classList.add("hidden");
-}
-
-// Event Listeners
-drawCardButton.addEventListener("click", drawCard);
-
-// Load Cards on Page Load
-window.onload = loadCards;
+});
