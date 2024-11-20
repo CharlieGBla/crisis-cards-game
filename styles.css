@@ -1,124 +1,94 @@
-/* General Body Styling */
+/* General Styles */
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f7f7f7;
-    color: #333;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-}
-
-/* Container for Cards */
-#card-container {
-    margin: 20px 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-}
-
-/* Individual Card Styling */
-.card {
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    width: 300px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     text-align: center;
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 20px;
 }
 
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+h1 {
+    color: #333;
 }
 
-/* Card Text */
-.card p {
-    margin-bottom: 15px;
-    font-size: 16px;
-    color: #555;
-}
-
-/* Buttons Inside Cards */
-.card button {
+/* Card Button */
+#draw-card {
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
     background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
-    padding: 10px 15px;
-    font-size: 14px;
-    cursor: pointer;
-    margin: 5px;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s;
 }
 
-.card button:hover {
+#draw-card:hover {
     background-color: #0056b3;
 }
 
-/* Slider Container */
-#sliders {
-    margin-top: 30px;
-    width: 90%;
-    max-width: 600px;
+/* Popup Styles */
+#popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* Slider Labels */
-#sliders label {
-    font-weight: bold;
-    display: block;
-    margin: 15px 0 5px;
+.hidden {
+    display: none;
+}
+
+.popup-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 80%;
+    max-width: 400px;
+}
+
+.popup-content button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.popup-content button:hover {
+    background-color: #218838;
 }
 
 /* Sliders */
+#sliders {
+    margin-top: 20px;
+    width: 100%;
+    max-width: 600px;
+    text-align: left;
+}
+
+#sliders label {
+    font-weight: bold;
+    display: block;
+    margin: 10px 0;
+}
+
 #sliders input[type="range"] {
     width: 100%;
-    -webkit-appearance: none;
-    height: 5px;
-    background: #ddd;
-    border-radius: 5px;
-    outline: none;
-    margin: 0;
     cursor: pointer;
 }
 
-#sliders input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    background: #007bff;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-#sliders input[type="range"]::-moz-range-thumb {
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    background: #007bff;
-    cursor: pointer;
-}
-
-/* Responsiveness */
-@media (max-width: 600px) {
-    #card-container {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .card {
-        width: 90%;
-    }
-
-    #sliders {
-        width: 100%;
-    }
+#sliders span {
+    font-weight: normal;
 }
