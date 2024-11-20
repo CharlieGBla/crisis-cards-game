@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const drawCardButton = document.getElementById("draw-card");
     const popup = document.getElementById("popup");
+    popup.classList.add("hidden");
     const cardDescription = document.getElementById("card-description");
     const option1Button = document.getElementById("option1");
     const option2Button = document.getElementById("option2");
