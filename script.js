@@ -99,6 +99,5 @@ document.addEventListener("DOMContentLoaded", () => {
     // Close the popup
     function closePopup() {
         popup.style.display = "none";
-        popup.classList.add("hidden");
     }
 });
