@@ -1,72 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Societal Tensions Game</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crisis Cards</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Societal Tensions Game</h1>
-    </header>
-    <main>
-        <button id="draw-card">Draw Card</button>
-        <p id="message"></p>
-        
-        <div id="popup" class="hidden">
-            <div class="popup-content">
-                <p id="card-description"></p>
-                <div class="popup-options">
-                    <button id="option1"></button>
-                    <button id="option2"></button>
-                </div>
-            </div>
-        </div>
-        
-        <div id="sliders">
-            <div class="slider-container">
-                <label for="agrarian">Agrarian</label>
-                <input type="range" id="agrarian" min="0" max="100" value="50">
-                <span id="agrarian-value">50</span>
-            </div>
-            <div class="slider-container">
-                <label for="industry">Industry</label>
-                <input type="range" id="industry" min="0" max="100" value="50">
-                <span id="industry-value">50</span>
-            </div>
-            <div class="slider-container">
-                <label for="religion">Religion</label>
-                <input type="range" id="religion" min="0" max="100" value="50">
-                <span id="religion-value">50</span>
-            </div>
-            <div class="slider-container">
-                <label for="officials">Officials</label>
-                <input type="range" id="officials" min="0" max="100" value="50">
-                <span id="officials-value">50</span>
-            </div>
-            <div class="slider-container">
-                <label for="education">Education</label>
-                <input type="range" id="education" min="0" max="100" value="50">
-                <span id="education-value">50</span>
-            </div>
-            <div class="slider-container">
-                <label for="commerce">Commerce</label>
-                <input type="range" id="commerce" min="0" max="100" value="50">
-                <span id="commerce-value">50</span>
-            </div>
-            <div class="slider-container">
-                <label for="influence">Influence</label>
-                <input type="range" id="influence" min="0" max="100" value="50">
-                <span id="influence-value">50</span>
-            </div>
-            <div class="slider-container">
-                <label for="military">Military</label>
-                <input type="range" id="military" min="0" max="100" value="50">
-                <span id="military-value">50</span>
-            </div>
-        </div>
-    </main>
-    <script src="script.js"></script>
+  <h1>Crisis Cards</h1>
+  
+  <!-- Card -->
+  <div id="card" onclick="drawCard()">Click Me!</div>
+  
+  <!-- Popup -->
+  <div id="popup">
+    <div id="popup-content">
+      <p id="popup-text"></p>
+      <button onclick="closePopup()">Close</button>
+    </div>
+  </div>
+  
+  <!-- Sliders -->
+  <div id="sliders">
+    <label for="racism">Racism: <span id="racism-value">50</span></label>
+    <input type="range" id="racism" min="0" max="100" value="50">
+    
+    <label for="economy">Economy: <span id="economy-value">50</span></label>
+    <input type="range" id="economy" min="0" max="100" value="50">
+    
+    <label for="ecology">Ecology: <span id="ecology-value">50</span></label>
+    <input type="range" id="ecology" min="0" max="100" value="50">
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
