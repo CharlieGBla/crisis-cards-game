@@ -8,26 +8,31 @@
 </head>
 <body>
   <h1>Crisis Cards Game</h1>
-  <div id="sliders">
-    <div>Agrarian: <span id="agrarian">50</span></div>
-    <div>Industry: <span id="industry">50</span></div>
-    <div>Religion: <span id="religion">50</span></div>
-    <div>Officials: <span id="officials">50</span></div>
-    <div>Education: <span id="education">50</span></div>
-    <div>Commerce: <span id="commerce">50</span></div>
-    <div>Influence: <span id="influence">50</span></div>
-    <div>Military: <span id="military">50</span></div>
-  </div>
-  <button id="draw-card">Draw Card</button>
-
-  <!-- Modal -->
-  <div id="modal" class="modal hidden">
-    <div class="modal-content">
-      <p id="card-description"></p>
-      <button id="option1" class="option-btn"></button>
-      <button id="option2" class="option-btn"></button>
+  <div class="game-container">
+  <div class="sliders-left">
+    <div class="slider">
+      <label for="military">Military:</label>
+      <span id="military">50</span>
+    </div>
+    <div class="slider">
+      <label for="happiness">Happiness:</label>
+      <span id="happiness">50</span>
     </div>
   </div>
+
+  <div class="card-container">
+    <button id="draw-card" class="card-button">Draw Card</button>
+  </div>
+</div>
+
+<div id="modal" class="modal hidden">
+  <div class="card-modal">
+    <h3 id="card-description">Card Description</h3>
+    <button id="option1" class="card-option">Option 1</button>
+    <button id="option2" class="card-option">Option 2</button>
+  </div>
+</div>
+
 
   <script src="script.js"></script>
 </body>
