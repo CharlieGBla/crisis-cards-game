@@ -18,12 +18,17 @@
     <div>Influence: <span id="influence">50</span></div>
     <div>Military: <span id="military">50</span></div>
   </div>
-    <button id="draw-card">Draw Card</button>
-  <div id="popup" class="hidden">
-    <p id="card-description"></p>
-    <button id="option1"></button>
-    <button id="option2"></button>
+  <button id="draw-card">Draw Card</button>
+
+  <!-- Modal -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <p id="card-description"></p>
+      <button id="option1" class="option-btn"></button>
+      <button id="option2" class="option-btn"></button>
+    </div>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
