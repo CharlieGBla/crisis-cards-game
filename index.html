@@ -3,37 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Crisis Cards</title>
+  <title>Crisis Cards Game</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 <body>
-  <h1>Crisis Cards</h1>
-  
-  <!-- Card -->
-  <div id="card" onclick="drawCard()">Click Me!</div>
-  
-  <!-- Popup -->
-  <div id="popup">
-    <div id="popup-content">
-      <p id="popup-text"></p>
-      <button onclick="closePopup()">Close</button>
-    </div>
-  </div>
-  
-  <div id="card-container"></div>
-
+  <h1>Crisis Cards Game</h1>
   <div id="sliders">
-      <label for="agrarian">Agrarian:</label><input type="range" id="agrarian" min="0" max="100" value="50"><br>
-      <label for="industry">Industry:</label><input type="range" id="industry" min="0" max="100" value="50"><br>
-      <label for="religion">Religion:</label><input type="range" id="religion" min="0" max="100" value="50"><br>
-      <label for="officials">Officials:</label><input type="range" id="officials" min="0" max="100" value="50"><br>
-      <label for="education">Education:</label><input type="range" id="education" min="0" max="100" value="50"><br>
-      <label for="commerce">Commerce:</label><input type="range" id="commerce" min="0" max="100" value="50"><br>
-      <label for="influence">Influence:</label><input type="range" id="influence" min="0" max="100" value="50"><br>
-      <label for="military">Military:</label><input type="range" id="military" min="0" max="100" value="50"><br>
+    <div>Agrarian: <span id="agrarian">50</span></div>
+    <div>Industry: <span id="industry">50</span></div>
+    <div>Religion: <span id="religion">50</span></div>
+    <div>Officials: <span id="officials">50</span></div>
+    <div>Education: <span id="education">50</span></div>
+    <div>Commerce: <span id="commerce">50</span></div>
+    <div>Influence: <span id="influence">50</span></div>
+    <div>Military: <span id="military">50</span></div>
   </div>
-
+  <button id="draw-card">Draw Card</button>
+  <div id="popup" class="hidden">
+    <p id="card-description"></p>
+    <button id="option1"></button>
+    <button id="option2"></button>
+  </div>
   <script src="script.js"></script>
 </body>
 </html>
