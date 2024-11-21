@@ -57,16 +57,16 @@ document.getElementById('draw-card').addEventListener('click', () => {
   document.getElementById('option1').innerText = card.Option1;
   document.getElementById('option2').innerText = card.Option2;
 
-  document.getElementById('popup').classList.remove('hidden');
+  document.getElementById('modal').classList.remove('hidden');
 
   document.getElementById('option1').onclick = () => {
     applyEffect(card.Option1);
-    closePopup();
+    closeModal();
   };
 
   document.getElementById('option2').onclick = () => {
     applyEffect(card.Option2);
-    closePopup();
+    closeModal();
   };
 });
 
@@ -74,4 +74,26 @@ function applyEffect(option) {
   const matches = option.match(/([+-]\d+) (\w+)/);
   if (matches) {
     const [_, value, stat] = matches;
-    sliders[stat.toLowerCase()]
+    sliders[stat.toLowerCase()] += parseInt(value, 10);
+    updateSliders();
+  }
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.add('hidden');
+}
+
+function resetGame() {
+  sliders = {
+    agrarian: 50,
+    industry: 50,
+    religion: 50,
+    officials: 50,
+    education: 50,
+    commerce: 50,
+    influence: 50,
+    military: 50,
+  };
+  usedCards = [];
+  updateSliders();
+}
