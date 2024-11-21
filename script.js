@@ -21,11 +21,15 @@ fetch(sheetURL)
     cards = parseCSV(data);
   });
 
-function parseCSV(data) {
-  const rows = data.split('\n').slice(1); // Skip header row
+function parseCSV(csv) {
+  const rows = csv.split('\n').map((row) => row.split(','));
+  const headers = rows.shift(); // First row is the header
   return rows.map((row) => {
-    const [CardID, Description, Option1, Option2] = row.split(',');
-    return { CardID, Description, Option1, Option2 };
+    const card = {};
+    headers.forEach((header, index) => {
+      card[header.trim()] = row[index]?.trim();
+    });
+    return card;
   });
 }
 
