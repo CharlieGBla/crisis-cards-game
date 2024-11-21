@@ -13,7 +13,9 @@ let cards = [];
 let usedCards = [];
 
 // Fetch and parse CSV file
-fetch('assets/cards.csv')
+const sheetURL = 'https://docs.google.com/spreadsheets/d/e/your-sheet-id/pub?output=csv';
+
+fetch(sheetURL)
   .then((response) => response.text())
   .then((data) => {
     cards = parseCSV(data);
