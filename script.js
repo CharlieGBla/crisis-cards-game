@@ -13,7 +13,7 @@ let cards = [];
 let usedCards = [];
 
 // Fetch and parse CSV file
-const sheetURL = 'https://docs.google.com/spreadsheets/d/e/your-sheet-id/pub?output=csv';
+const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQRK-SaMmIiSA3Oxfjp0d3lvhAZBZMIYuaNoWQ3A231H8DS7ysnKRX3RT5ibBa5Pmlw0v6I-_AV0tQi/pub?output=csv';
 
 fetch(sheetURL)
   .then((response) => response.text())
