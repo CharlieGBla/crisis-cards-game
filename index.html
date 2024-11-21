@@ -3,72 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Card Game</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Crisis Cards Game</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-  <div class="game-container">
-    <!-- Left Slider (Military) -->
-    <div class="slider-container left">
-      <div class="slider">
-        <label for="military">Military:</label>
-        <span id="military">50</span>
-      </div>
-    </div>
-
-    <!-- Center (Draw Card Button) -->
-    <div class="card-container">
-      <button id="draw-card" class="card-button">Draw Card</button>
-    </div>
-
-    <!-- Right Slider (Happiness) -->
-    <div class="slider-container right">
-      <div class="slider">
-        <label for="happiness">Happiness:</label>
-        <span id="happiness">50</span>
-      </div>
-    </div>
+  <h1>Crisis Cards Game</h1>
+  <div id="sliders">
+    <div>Agrarian: <span id="agrarian">50</span></div>
+    <div>Industry: <span id="industry">50</span></div>
+    <div>Religion: <span id="religion">50</span></div>
+    <div>Officials: <span id="officials">50</span></div>
+    <div>Education: <span id="education">50</span></div>
+    <div>Commerce: <span id="commerce">50</span></div>
+    <div>Influence: <span id="influence">50</span></div>
+    <div>Military: <span id="military">50</span></div>
   </div>
+  <button id="draw-card">Draw Card</button>
 
-  <!-- Rest of Sliders -->
-  <div class="other-sliders">
-    <div class="slider">
-      <label for="agrarian">Agrarian:</label>
-      <span id="agrarian">50</span>
-    </div>
-    <div class="slider">
-      <label for="industry">Industry:</label>
-      <span id="industry">50</span>
-    </div>
-    <div class="slider">
-      <label for="religion">Religion:</label>
-      <span id="religion">50</span>
-    </div>
-    <div class="slider">
-      <label for="officials">Officials:</label>
-      <span id="officials">50</span>
-    </div>
-    <div class="slider">
-      <label for="education">Education:</label>
-      <span id="education">50</span>
-    </div>
-    <div class="slider">
-      <label for="commerce">Commerce:</label>
-      <span id="commerce">50</span>
-    </div>
-    <div class="slider">
-      <label for="influence">Influence:</label>
-      <span id="influence">50</span>
-    </div>
-  </div>
-
-  <!-- Modal for Card Options -->
+  <!-- Modal -->
   <div id="modal" class="modal hidden">
-    <div class="card-modal">
-      <h3 id="card-description">Card Description</h3>
-      <button id="option1" class="card-option">Option 1</button>
-      <button id="option2" class="card-option">Option 2</button>
+    <div class="modal-content">
+      <p id="card-description"></p>
+      <button id="option1" class="option-btn"></button>
+      <button id="option2" class="option-btn"></button>
     </div>
   </div>
 
