@@ -19,18 +19,27 @@ fetch(sheetURL)
   .then((response) => response.text())
   .then((data) => {
     cards = parseCSV(data);
+    if (cards.length === 0) {
+      alert('No valid cards were found in the CSV file. Please check the data.');
+    }
+  })
+  .catch((error) => {
+    console.error('Error fetching or parsing the CSV file:', error);
+    alert('Failed to load the card data. Please try again later.');
   });
 
 function parseCSV(csv) {
   const rows = csv.split('\n').map((row) => row.split(','));
   const headers = rows.shift(); // First row is the header
-  return rows.map((row) => {
-    const card = {};
-    headers.forEach((header, index) => {
-      card[header.trim()] = row[index]?.trim();
-    });
-    return card;
-  });
+  return rows
+    .map((row) => {
+      const card = {};
+      headers.forEach((header, index) => {
+        card[header.trim()] = row[index]?.trim();
+      });
+      return card;
+    })
+    .filter((card) => card.Description && card.Option1 && card.Option2); // Only valid cards
 }
 
 // Update sliders on the UI
@@ -46,6 +55,11 @@ function updateSliders() {
 
 // Draw a card
 document.getElementById('draw-card').addEventListener('click', () => {
+  if (cards.length === 0) {
+    alert('No cards available. Please check the data source.');
+    return;
+  }
+
   if (cards.length === usedCards.length) {
     alert('You win! All cards have been used.');
     resetGame();
@@ -59,12 +73,14 @@ document.getElementById('draw-card').addEventListener('click', () => {
 
   usedCards.push(card.CardID);
 
-  document.getElementById('card-description').innerText = card.Description;
-  document.getElementById('option1').innerText = card.Option1;
-  document.getElementById('option2').innerText = card.Option2;
+  // Display card content
+  document.getElementById('card-description').innerText = card.Description || 'No description available.';
+  document.getElementById('option1').innerText = card.Option1 || 'Option not available.';
+  document.getElementById('option2').innerText = card.Option2 || 'Option not available.';
 
   document.getElementById('modal').classList.remove('hidden');
 
+  // Handle button clicks
   document.getElementById('option1').onclick = () => {
     applyEffect(card.Option1);
     closeModal();
@@ -77,11 +93,17 @@ document.getElementById('draw-card').addEventListener('click', () => {
 });
 
 function applyEffect(option) {
-  const matches = option.match(/([+-]\d+) (\w+)/);
+  const matches = option.match(/([+-]\d+)\s(\w+)/);
   if (matches) {
     const [_, value, stat] = matches;
-    sliders[stat.toLowerCase()] += parseInt(value, 10);
-    updateSliders();
+    if (sliders.hasOwnProperty(stat.toLowerCase())) {
+      sliders[stat.toLowerCase()] += parseInt(value, 10);
+      updateSliders();
+    } else {
+      console.error(`Invalid stat: ${stat}`);
+    }
+  } else {
+    console.error(`Invalid effect format: ${option}`);
   }
 }
 
@@ -102,4 +124,14 @@ function resetGame() {
   };
   usedCards = [];
   updateSliders();
+
+  // Re-fetch the cards to reset
+  fetch(sheetURL)
+    .then((response) => response.text())
+    .then((data) => {
+      cards = parseCSV(data);
+    })
+    .catch((error) => {
+      console.error('Error fetching or parsing the CSV file during reset:', error);
+    });
 }
