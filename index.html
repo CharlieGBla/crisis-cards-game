@@ -6,6 +6,7 @@
   <title>Crisis Cards</title>
   <link rel="stylesheet" href="styles.css">
 </head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 <body>
   <h1>Crisis Cards</h1>
   
@@ -20,16 +21,17 @@
     </div>
   </div>
   
-  <!-- Sliders -->
+  <div id="card-container"></div>
+
   <div id="sliders">
-    <label for="racism">Racism: <span id="racism-value">50</span></label>
-    <input type="range" id="racism" min="0" max="100" value="50">
-    
-    <label for="economy">Economy: <span id="economy-value">50</span></label>
-    <input type="range" id="economy" min="0" max="100" value="50">
-    
-    <label for="ecology">Ecology: <span id="ecology-value">50</span></label>
-    <input type="range" id="ecology" min="0" max="100" value="50">
+      <label for="agrarian">Agrarian:</label><input type="range" id="agrarian" min="0" max="100" value="50"><br>
+      <label for="industry">Industry:</label><input type="range" id="industry" min="0" max="100" value="50"><br>
+      <label for="religion">Religion:</label><input type="range" id="religion" min="0" max="100" value="50"><br>
+      <label for="officials">Officials:</label><input type="range" id="officials" min="0" max="100" value="50"><br>
+      <label for="education">Education:</label><input type="range" id="education" min="0" max="100" value="50"><br>
+      <label for="commerce">Commerce:</label><input type="range" id="commerce" min="0" max="100" value="50"><br>
+      <label for="influence">Influence:</label><input type="range" id="influence" min="0" max="100" value="50"><br>
+      <label for="military">Military:</label><input type="range" id="military" min="0" max="100" value="50"><br>
   </div>
 
   <script src="script.js"></script>
