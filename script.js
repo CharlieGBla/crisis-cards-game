@@ -20,7 +20,9 @@ fetch(sheetURL)
   .then((data) => {
     cards = parseCSV(data);
     if (cards.length === 0) {
-      alert('No valid cards were found in the CSV file. Please check the data.');
+      alert('No valid cards found in the CSV file. Check the data.');
+    } else {
+      console.log(`Successfully loaded ${cards.length} cards.`); // Debugging info
     }
   })
   .catch((error) => {
@@ -32,6 +34,7 @@ function parseCSV(csv) {
   const rows = csv.split('\n').map((row) => row.split(','));
   const headers = rows.shift(); // First row is the header
   return rows
+    .filter((row) => row.length >= 4) // Ensure the row has at least 4 columns (CardID, Description, Option1, Option2)
     .map((row) => {
       const card = {};
       headers.forEach((header, index) => {
@@ -39,7 +42,7 @@ function parseCSV(csv) {
       });
       return card;
     })
-    .filter((card) => card.Description && card.Option1 && card.Option2); // Only valid cards
+    .filter((card) => card.Description && card.Option1 && card.Option2); // Only include valid cards
 }
 
 // Update sliders on the UI
@@ -130,6 +133,7 @@ function resetGame() {
     .then((response) => response.text())
     .then((data) => {
       cards = parseCSV(data);
+      console.log(`Game reset. Loaded ${cards.length} cards.`);
     })
     .catch((error) => {
       console.error('Error fetching or parsing the CSV file during reset:', error);
