@@ -1,51 +1,77 @@
-// Load the CSV file
-Papa.parse("assets/cards.csv", {
-    download: true,
-    header: true,
-    dynamicTyping: true,
-    complete: function(results) {
-        console.log(results);
-        generateCards(results.data);
+let sliders = {
+  agrarian: 50,
+  industry: 50,
+  religion: 50,
+  officials: 50,
+  education: 50,
+  commerce: 50,
+  influence: 50,
+  military: 50,
+};
+
+let cards = [];
+let usedCards = [];
+
+// Fetch and parse CSV file
+fetch('assets/cards.csv')
+  .then((response) => response.text())
+  .then((data) => {
+    cards = parseCSV(data);
+  });
+
+function parseCSV(data) {
+  const rows = data.split('\n').slice(1); // Skip header row
+  return rows.map((row) => {
+    const [CardID, Description, Option1, Option2] = row.split(',');
+    return { CardID, Description, Option1, Option2 };
+  });
+}
+
+// Update sliders on the UI
+function updateSliders() {
+  for (let key in sliders) {
+    document.getElementById(key).innerText = sliders[key];
+    if (sliders[key] <= 0) {
+      alert('Game Over! One of your sliders reached 0.');
+      resetGame();
     }
+  }
+}
+
+// Draw a card
+document.getElementById('draw-card').addEventListener('click', () => {
+  if (cards.length === usedCards.length) {
+    alert('You win! All cards have been used.');
+    resetGame();
+    return;
+  }
+
+  let card;
+  do {
+    card = cards[Math.floor(Math.random() * cards.length)];
+  } while (usedCards.includes(card.CardID));
+
+  usedCards.push(card.CardID);
+
+  document.getElementById('card-description').innerText = card.Description;
+  document.getElementById('option1').innerText = card.Option1;
+  document.getElementById('option2').innerText = card.Option2;
+
+  document.getElementById('popup').classList.remove('hidden');
+
+  document.getElementById('option1').onclick = () => {
+    applyEffect(card.Option1);
+    closePopup();
+  };
+
+  document.getElementById('option2').onclick = () => {
+    applyEffect(card.Option2);
+    closePopup();
+  };
 });
 
-function generateCards(cards) {
-    const cardContainer = document.getElementById('card-container');
-    cards.forEach(card => {
-        const cardElement = document.createElement('div');
-        cardElement.classList.add('card');
-        
-        const cardDescription = document.createElement('p');
-        cardDescription.innerText = card.Description;
-
-        const option1Button = document.createElement('button');
-        option1Button.innerText = card.Option1;
-        option1Button.onclick = () => handleOptionClick(card.Option1);
-
-        const option2Button = document.createElement('button');
-        option2Button.innerText = card.Option2;
-        option2Button.onclick = () => handleOptionClick(card.Option2);
-
-        cardElement.appendChild(cardDescription);
-        cardElement.appendChild(option1Button);
-        cardElement.appendChild(option2Button);
-
-        cardContainer.appendChild(cardElement);
-    });
-}
-function handleOptionClick(option) {
-    // Parse the change (e.g., +5 Industry)
-    const match = option.match(/\(\+(\d+) (\w+)\)/);
-    if (match) {
-        const value = parseInt(match[1]);
-        const sliderId = match[2].toLowerCase();
-
-        const slider = document.getElementById(sliderId);
-        slider.value = Math.min(100, Math.max(0, parseInt(slider.value) + value));
-    }
-}
-
-// Close popup
-function closePopup() {
-  popup.style.display = "none";
-}
+function applyEffect(option) {
+  const matches = option.match(/([+-]\d+) (\w+)/);
+  if (matches) {
+    const [_, value, stat] = matches;
+    sliders[stat.toLowerCase()]
