@@ -8,7 +8,21 @@
 </head>
 <body>
   <h1>Crisis Cards Game</h1>
+
+  <!-- Slider Section -->
   <div id="sliders">
+    <div id="military-bar"></div> <!-- Military Bar (Left side) -->
+    
+    <!-- Card Drawing Section -->
+    <div id="draw-card-container">
+      <button id="draw-card">Draw Card</button>
+    </div>
+    
+    <div id="happiness-bar"></div> <!-- Happiness Bar (Right side) -->
+  </div>
+
+  <!-- Sliders for other stats -->
+  <div id="slider-container">
     <div>Agrarian: <span id="agrarian">50</span></div>
     <div>Industry: <span id="industry">50</span></div>
     <div>Religion: <span id="religion">50</span></div>
@@ -16,9 +30,7 @@
     <div>Education: <span id="education">50</span></div>
     <div>Commerce: <span id="commerce">50</span></div>
     <div>Influence: <span id="influence">50</span></div>
-    <div>Military: <span id="military">50</span></div>
   </div>
-  <button id="draw-card">Draw Card</button>
 
   <!-- Modal -->
   <div id="modal" class="modal hidden">
