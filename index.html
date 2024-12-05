@@ -4,11 +4,54 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Crisis Cards Game</title>
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    .slider {
+      width: 50%;
+      margin: 10px auto;
+    }
+    .card-button {
+      display: inline-block;
+      width: 200px;
+      height: 300px;
+      margin: 20px auto;
+      background: #eee;
+      border: 2px solid #000;
+      border-radius: 10px;
+      font-size: 20px;
+      font-weight: bold;
+      line-height: 300px;
+      text-align: center;
+      cursor: pointer;
+      background-image: url('assets/1941 Blondie Comic Playing Card.jpg');
+      background-size: cover;
+    }
+    .options button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
 </head>
 <body>
   <h1>Crisis Cards Game</h1>
-
+  <p id="instructions">Try to keep your sliders balanced! Draw a card to start.</p>
+  <div>
+    <div id="draw-card" class="card-button">Draw Card</div>
+  </div>
+  <div class="card" style="display: none;">
+    <p id="description"></p>
+    <div class="options">
+      <button id="option1"></button>
+      <button id="option2"></button>
+    </div>
+  </div>
+  
   <!-- Sliders -->
   <div id="sliders">
     <div>Agrarian: <span id="agrarian">50</span></div>
