@@ -22,7 +22,7 @@ fetch(sheetURL)
     if (cards.length === 0) {
       alert('No valid cards found in the CSV file. Check the data.');
     } else {
-      console.log(`Successfully loaded ${cards.length} cards.`); // Debugging info
+      console.log(`Successfully loaded ${cards.length} cards.`);
     }
   })
   .catch((error) => {
@@ -32,9 +32,9 @@ fetch(sheetURL)
 
 function parseCSV(csv) {
   const rows = csv.split('\n').map((row) => row.split(','));
-  const headers = rows.shift(); // First row is the header
+  const headers = rows.shift();
   return rows
-    .filter((row) => row.length >= 4) // Ensure the row has at least 4 columns (CardID, Description, Option1, Option2)
+    .filter((row) => row.length >= 4)
     .map((row) => {
       const card = {};
       headers.forEach((header, index) => {
@@ -42,7 +42,7 @@ function parseCSV(csv) {
       });
       return card;
     })
-    .filter((card) => card.Description && card.Option1 && card.Option2); // Only include valid cards
+    .filter((card) => card.Description && card.Option1 && card.Option2);
 }
 
 // Update sliders on the UI
@@ -55,6 +55,16 @@ function updateSliders() {
     }
   }
 }
+
+// Show initial popup
+document.addEventListener('DOMContentLoaded', () => {
+  const introModal = document.getElementById('intro-modal');
+  introModal.classList.remove('hidden');
+
+  document.getElementById('start-game').addEventListener('click', () => {
+    introModal.classList.add('hidden');
+  });
+});
 
 // Draw a card
 document.getElementById('draw-card').addEventListener('click', () => {
@@ -85,29 +95,32 @@ document.getElementById('draw-card').addEventListener('click', () => {
 
   // Handle button clicks
   document.getElementById('option1').onclick = () => {
-    applyEffect(card.Option1);
+    applyEffects(card.Option1);
     closeModal();
   };
 
   document.getElementById('option2').onclick = () => {
-    applyEffect(card.Option2);
+    applyEffects(card.Option2);
     closeModal();
   };
 });
 
-function applyEffect(option) {
-  const matches = option.match(/([+-]\d+)\s(\w+)/);
-  if (matches) {
-    const [_, value, stat] = matches;
-    if (sliders.hasOwnProperty(stat.toLowerCase())) {
-      sliders[stat.toLowerCase()] += parseInt(value, 10);
-      updateSliders();
+function applyEffects(option) {
+  const effects = option.split(',').map((effect) => effect.trim());
+  effects.forEach((effect) => {
+    const matches = effect.match(/([+-]\d+)\s(\w+)/);
+    if (matches) {
+      const [_, value, stat] = matches;
+      if (sliders.hasOwnProperty(stat.toLowerCase())) {
+        sliders[stat.toLowerCase()] += parseInt(value, 10);
+      } else {
+        console.error(`Invalid stat: ${stat}`);
+      }
     } else {
-      console.error(`Invalid stat: ${stat}`);
+      console.error(`Invalid effect format: ${effect}`);
     }
-  } else {
-    console.error(`Invalid effect format: ${option}`);
-  }
+  });
+  updateSliders();
 }
 
 function closeModal() {
@@ -128,7 +141,6 @@ function resetGame() {
   usedCards = [];
   updateSliders();
 
-  // Re-fetch the cards to reset
   fetch(sheetURL)
     .then((response) => response.text())
     .then((data) => {
