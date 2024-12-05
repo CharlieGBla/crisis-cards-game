@@ -83,33 +83,33 @@ async function fetchCards() {
 
 async function startGame() {
   const cards = await fetchCards();
+  const card = document.getElementById("card");
   const descriptionEl = document.getElementById("description");
   const option1Btn = document.getElementById("option1");
   const option2Btn = document.getElementById("option2");
-  const cardDiv = document.querySelector(".card");
-  const drawCardBtn = document.getElementById("draw-card");
 
-  drawCardBtn.onclick = () => {
-    drawCard();
-    cardDiv.style.display = "block";
-    drawCardBtn.style.display = "none";
-  };
+  card.addEventListener("click", () => {
+    if (card.classList.contains("front")) {
+      drawCard();
+      card.classList.remove("front");
+      card.classList.add("back");
+    }
+  });
 
   function drawCard() {
-    const card = cards[Math.floor(Math.random() * cards.length)];
-    descriptionEl.textContent = card.description;
-    option1Btn.textContent = card.option1.text;
-    option2Btn.textContent = card.option2.text;
+    const cardData = cards[Math.floor(Math.random() * cards.length)];
+    descriptionEl.textContent = cardData.description;
+    option1Btn.textContent = cardData.option1.text;
+    option2Btn.textContent = cardData.option2.text;
 
-    option1Btn.onclick = () => {
-      updateSliders(card.option1.effects);
-      drawCard();
+    const handleOptionClick = effects => {
+      updateSliders(effects);
+      card.classList.remove("back");
+      card.classList.add("front");
     };
 
-    option2Btn.onclick = () => {
-      updateSliders(card.option2.effects);
-      drawCard();
-    };
+    option1Btn.onclick = () => handleOptionClick(cardData.option1.effects);
+    option2Btn.onclick = () => handleOptionClick(cardData.option2.effects);
   }
 }
 
