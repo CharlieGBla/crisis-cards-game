@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Crisis Cards Game</title>
+  <title>Kingdom Pleaser Game</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -15,37 +15,59 @@
       width: 50%;
       margin: 10px auto;
     }
-    .card-button {
-      display: inline-block;
-      width: 200px;
-      height: 300px;
+    .card {
+      width: 250px;
+      height: 350px;
       margin: 20px auto;
       background: #eee;
       border: 2px solid #000;
       border-radius: 10px;
-      font-size: 20px;
-      font-weight: bold;
-      line-height: 300px;
-      text-align: center;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       cursor: pointer;
-      background-image: url('assets/1941 Blondie Comic Playing Card.jpg');
+      background-image: url('assets/1941 Blondie Comic Playing Card.jpg'); /* Placeholder for card image */
       background-size: cover;
+      text-align: center;
     }
-    .options button {
-      margin: 5px;
-      padding: 10px 20px;
-      font-size: 16px;
+    .card .description {
+      display: none;
+      padding: 10px;
+      font-size: 14px;
+    }
+    .card .options {
+      display: none;
+      position: absolute;
+      bottom: 10px;
+      width: 90%;
+    }
+    .card .options button {
+      width: 100%;
+      margin: 5px 0;
+      padding: 10px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .card.front .draw-text {
+      display: block;
+    }
+    .card.back .description,
+    .card.back .options {
+      display: block;
+    }
+    .card.back .draw-text {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <h1>Crisis Cards Game</h1>
-  <p id="instructions">Try to keep your sliders balanced! Draw a card to start.</p>
-  <div>
-    <div id="draw-card" class="card-button"></div>
-  </div>
-  <div class="card" style="display: none;">
-    <p id="description"></p>
+  <h1>Kingdom Pleaser Game</h1>
+  <p id="instructions">Try to keep your sliders balanced! Click the card to start.</p>
+  <div class="card front" id="card">
+    <div class="draw-text">Draw Card</div>
+    <div class="description" id="description"></div>
     <div class="options">
       <button id="option1"></button>
       <button id="option2"></button>
