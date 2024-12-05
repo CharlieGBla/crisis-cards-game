@@ -24,7 +24,7 @@ async function fetchCards() {
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQRK-SaMmIiSA3Oxfjp0d3lvhAZBZMIYuaNoWQ3A231H8DS7ysnKRX3RT5ibBa5Pmlw0v6I-_AV0tQi/pub?output=csv"
   );
   const text = await response.text();
-  const rows = text.split("\n").slice(1); // Remove header
+  const rows = text.split("\n").slice(1); // Skip header row
   return rows.map(row => {
     const [
       CardID,
@@ -88,29 +88,27 @@ async function startGame() {
   const option1Btn = document.getElementById("option1");
   const option2Btn = document.getElementById("option2");
 
-  card.addEventListener("click", () => {
-    if (card.classList.contains("front")) {
-      drawCard();
-      card.classList.remove("front");
-      card.classList.add("back");
-    }
-  });
-
   function drawCard() {
     const cardData = cards[Math.floor(Math.random() * cards.length)];
     descriptionEl.textContent = cardData.description;
     option1Btn.textContent = cardData.option1.text;
     option2Btn.textContent = cardData.option2.text;
 
-    const handleOptionClick = effects => {
-      updateSliders(effects);
-      card.classList.remove("back");
-      card.classList.add("front");
-    };
-
     option1Btn.onclick = () => handleOptionClick(cardData.option1.effects);
     option2Btn.onclick = () => handleOptionClick(cardData.option2.effects);
   }
+
+  function handleOptionClick(effects) {
+    updateSliders(effects);
+    card.classList.remove("flipped"); // Reset to front
+  }
+
+  card.addEventListener("click", () => {
+    if (!card.classList.contains("flipped")) {
+      drawCard();
+      card.classList.add("flipped"); // Show back
+    }
+  });
 }
 
 startGame();
