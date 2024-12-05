@@ -9,145 +9,108 @@ let sliders = {
   military: 50,
 };
 
-let cards = [];
-let usedCards = [];
-
-// Fetch and parse CSV file
-const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQRK-SaMmIiSA3Oxfjp0d3lvhAZBZMIYuaNoWQ3A231H8DS7ysnKRX3RT5ibBa5Pmlw0v6I-_AV0tQi/pub?output=csv';
-
-fetch(sheetURL)
-  .then((response) => response.text())
-  .then((data) => {
-    cards = parseCSV(data);
-    if (cards.length === 0) {
-      alert('No valid cards found in the CSV file. Check the data.');
-    } else {
-      console.log(`Successfully loaded ${cards.length} cards.`);
-    }
-  })
-  .catch((error) => {
-    console.error('Error fetching or parsing the CSV file:', error);
-    alert('Failed to load the card data. Please try again later.');
-  });
-
-function parseCSV(csv) {
-  const rows = csv.split('\n').map((row) => row.split(','));
-  const headers = rows.shift();
-  return rows
-    .filter((row) => row.length >= 4)
-    .map((row) => {
-      const card = {};
-      headers.forEach((header, index) => {
-        card[header.trim()] = row[index]?.trim();
-      });
-      return card;
-    })
-    .filter((card) => card.Description && card.Option1 && card.Option2);
-}
-
-// Update sliders on the UI
-function updateSliders() {
-  for (let key in sliders) {
-    document.getElementById(key).innerText = sliders[key];
-    if (sliders[key] <= 0) {
-      alert('Game Over! One of your sliders reached 0.');
-      resetGame();
+function updateSliders(effects) {
+  for (const [key, value] of Object.entries(effects)) {
+    if (sliders[key] !== undefined) {
+      sliders[key] += value;
+      sliders[key] = Math.max(0, Math.min(100, sliders[key])); // Clamp between 0 and 100
+      document.getElementById(key).textContent = sliders[key];
     }
   }
 }
 
-// Show initial popup
-document.addEventListener('DOMContentLoaded', () => {
-  const introModal = document.getElementById('intro-modal');
-  introModal.classList.remove('hidden');
+async function fetchCards() {
+  const response = await fetch(
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vQRK-SaMmIiSA3Oxfjp0d3lvhAZBZMIYuaNoWQ3A231H8DS7ysnKRX3RT5ibBa5Pmlw0v6I-_AV0tQi/pub?output=csv"
+  );
+  const text = await response.text();
+  const rows = text.split("\n").slice(1); // Remove header
+  return rows.map(row => {
+    const [
+      CardID,
+      Description,
+      Option1,
+      Option2,
+      Agrarian_Effect1,
+      Industry_Effect1,
+      Religion_Effect1,
+      Officials_Effect1,
+      Education_Effect1,
+      Commerce_Effect1,
+      Influence_Effect1,
+      Military_Effect1,
+      Agrarian_Effect2,
+      Industry_Effect2,
+      Religion_Effect2,
+      Officials_Effect2,
+      Education_Effect2,
+      Commerce_Effect2,
+      Influence_Effect2,
+      Military_Effect2,
+    ] = row.split(",");
 
-  document.getElementById('start-game').addEventListener('click', () => {
-    introModal.classList.add('hidden');
+    return {
+      description: Description,
+      option1: {
+        text: Option1,
+        effects: {
+          agrarian: parseInt(Agrarian_Effect1),
+          industry: parseInt(Industry_Effect1),
+          religion: parseInt(Religion_Effect1),
+          officials: parseInt(Officials_Effect1),
+          education: parseInt(Education_Effect1),
+          commerce: parseInt(Commerce_Effect1),
+          influence: parseInt(Influence_Effect1),
+          military: parseInt(Military_Effect1),
+        },
+      },
+      option2: {
+        text: Option2,
+        effects: {
+          agrarian: parseInt(Agrarian_Effect2),
+          industry: parseInt(Industry_Effect2),
+          religion: parseInt(Religion_Effect2),
+          officials: parseInt(Officials_Effect2),
+          education: parseInt(Education_Effect2),
+          commerce: parseInt(Commerce_Effect2),
+          influence: parseInt(Influence_Effect2),
+          military: parseInt(Military_Effect2),
+        },
+      },
+    };
   });
-});
+}
 
-// Draw a card
-document.getElementById('draw-card').addEventListener('click', () => {
-  if (cards.length === 0) {
-    alert('No cards available. Please check the data source.');
-    return;
+async function startGame() {
+  const cards = await fetchCards();
+  const descriptionEl = document.getElementById("description");
+  const option1Btn = document.getElementById("option1");
+  const option2Btn = document.getElementById("option2");
+  const cardDiv = document.querySelector(".card");
+  const drawCardBtn = document.getElementById("draw-card");
+
+  drawCardBtn.onclick = () => {
+    drawCard();
+    cardDiv.style.display = "block";
+    drawCardBtn.style.display = "none";
+  };
+
+  function drawCard() {
+    const card = cards[Math.floor(Math.random() * cards.length)];
+    descriptionEl.textContent = card.description;
+    option1Btn.textContent = card.option1.text;
+    option2Btn.textContent = card.option2.text;
+
+    option1Btn.onclick = () => {
+      updateSliders(card.option1.effects);
+      drawCard();
+    };
+
+    option2Btn.onclick = () => {
+      updateSliders(card.option2.effects);
+      drawCard();
+    };
   }
-
-  if (cards.length === usedCards.length) {
-    alert('You win! All cards have been used.');
-    resetGame();
-    return;
-  }
-
-  let card;
-  do {
-    card = cards[Math.floor(Math.random() * cards.length)];
-  } while (usedCards.includes(card.CardID));
-
-  usedCards.push(card.CardID);
-
-  // Display card content
-  document.getElementById('card-description').innerText = card.Description || 'No description available.';
-  document.getElementById('option1').innerText = card.Option1 || 'Option not available.';
-  document.getElementById('option2').innerText = card.Option2 || 'Option not available.';
-
-  document.getElementById('modal').classList.remove('hidden');
-
-  // Handle button clicks
-  document.getElementById('option1').onclick = () => {
-    applyEffects(card.Option1);
-    closeModal();
-  };
-
-  document.getElementById('option2').onclick = () => {
-    applyEffects(card.Option2);
-    closeModal();
-  };
-});
-
-function applyEffects(option) {
-  const effects = option.split(',').map((effect) => effect.trim());
-  effects.forEach((effect) => {
-    const matches = effect.match(/([+-]\d+)\s(\w+)/);
-    if (matches) {
-      const [_, value, stat] = matches;
-      if (sliders.hasOwnProperty(stat.toLowerCase())) {
-        sliders[stat.toLowerCase()] += parseInt(value, 10);
-      } else {
-        console.error(`Invalid stat: ${stat}`);
-      }
-    } else {
-      console.error(`Invalid effect format: ${effect}`);
-    }
-  });
-  updateSliders();
 }
 
-function closeModal() {
-  document.getElementById('modal').classList.add('hidden');
-}
-
-function resetGame() {
-  sliders = {
-    agrarian: 50,
-    industry: 50,
-    religion: 50,
-    officials: 50,
-    education: 50,
-    commerce: 50,
-    influence: 50,
-    military: 50,
-  };
-  usedCards = [];
-  updateSliders();
-
-  fetch(sheetURL)
-    .then((response) => response.text())
-    .then((data) => {
-      cards = parseCSV(data);
-      console.log(`Game reset. Loaded ${cards.length} cards.`);
-    })
-    .catch((error) => {
-      console.error('Error fetching or parsing the CSV file during reset:', error);
-    });
-}
+startGame();
