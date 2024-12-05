@@ -15,62 +15,77 @@
       width: 50%;
       margin: 10px auto;
     }
-    .card {
+    .card-container {
+      position: relative;
       width: 250px;
       height: 350px;
       margin: 20px auto;
-      background: #eee;
+      perspective: 1000px;
+    }
+    .card {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      transform-style: preserve-3d;
+      transition: transform 0.6s;
+    }
+    .card .card-side {
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      position: absolute;
+      top: 0;
+      left: 0;
       border: 2px solid #000;
       border-radius: 10px;
-      position: relative;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      cursor: pointer;
-      background-image: url('assets/1941 Blondie Comic Playing Card.jpg'); /* Placeholder for card image */
-      background-size: cover;
       text-align: center;
+      background: #eee;
     }
-    .card .description {
-      display: none;
+    .card .front {
+      background-image: url('assets/card-placeholder.png'); /* Placeholder for front image */
+      background-size: cover;
+    }
+    .card .back {
+      transform: rotateY(180deg);
+      background: white;
+    }
+    .card.flipped {
+      transform: rotateY(180deg);
+    }
+    .back .description {
       padding: 10px;
       font-size: 14px;
     }
-    .card .options {
-      display: none;
-      position: absolute;
-      bottom: 10px;
+    .back .options {
+      margin-top: auto;
       width: 90%;
     }
-    .card .options button {
+    .back .options button {
       width: 100%;
       margin: 5px 0;
       padding: 10px;
       font-size: 14px;
       cursor: pointer;
     }
-    .card.front .draw-text {
-      display: block;
-    }
-    .card.back .description,
-    .card.back .options {
-      display: block;
-    }
-    .card.back .draw-text {
-      display: none;
-    }
   </style>
 </head>
 <body>
   <h1>Kingdom Pleaser Game</h1>
   <p id="instructions">Try to keep your sliders balanced! Click the card to start.</p>
-  <div class="card front" id="card">
-    <div class="draw-text">Draw Card</div>
-    <div class="description" id="description"></div>
-    <div class="options">
-      <button id="option1"></button>
-      <button id="option2"></button>
+  <div class="card-container">
+    <div class="card" id="card">
+      <div class="card-side front">Draw Card</div>
+      <div class="card-side back">
+        <div class="description" id="description"></div>
+        <div class="options">
+          <button id="option1"></button>
+          <button id="option2"></button>
+        </div>
+      </div>
     </div>
   </div>
   <div>
