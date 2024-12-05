@@ -4,7 +4,128 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Crisis Cards Game</title>
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* General Styles */
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #f0f0f0;
+    }
+
+    h1 {
+      margin: 20px 0;
+    }
+
+    /* Sliders */
+    #sliders {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100px;
+      margin: 20px 0;
+    }
+
+    #military-bar, #happiness-bar {
+      width: 50px;
+      height: 100%;
+      background-color: #007BFF;
+      border-radius: 10px;
+    }
+
+    #happiness-bar {
+      background-color: #28A745;
+    }
+
+    #draw-card-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    button#draw-card {
+      padding: 20px;
+      font-size: 18px;
+      border: none;
+      background-color: #FFC107;
+      color: #000;
+      border-radius: 10px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    button#draw-card:hover {
+      transform: scale(1.1);
+    }
+
+    /* Additional Sliders */
+    #slider-container {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      width: 80%;
+    }
+
+    #slider-container div {
+      background: #fff;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal.hidden {
+      display: none;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      width: 80%;
+      max-width: 400px;
+    }
+
+    .option-btn {
+      display: block;
+      width: 80%;
+      margin: 10px auto;
+      padding: 10px;
+      border: none;
+      background-color: #007BFF;
+      color: white;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .option-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
   <h1>Crisis Cards Game</h1>
@@ -12,12 +133,9 @@
   <!-- Slider Section -->
   <div id="sliders">
     <div id="military-bar"></div> <!-- Military Bar (Left side) -->
-    
-    <!-- Card Drawing Section -->
     <div id="draw-card-container">
       <button id="draw-card">Draw Card</button>
     </div>
-    
     <div id="happiness-bar"></div> <!-- Happiness Bar (Right side) -->
   </div>
 
@@ -41,6 +159,112 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    let sliders = {
+      agrarian: 50,
+      industry: 50,
+      religion: 50,
+      officials: 50,
+      education: 50,
+      commerce: 50,
+      influence: 50,
+      military: 50,
+    };
+
+    let cards = [
+      {
+        CardID: 1,
+        Description: "A new agrarian movement has formed.",
+        Option1: "+5 agrarian",
+        Option2: "+5 industry",
+      },
+      {
+        CardID: 2,
+        Description: "Religious leaders demand more influence.",
+        Option1: "+5 religion",
+        Option2: "+5 officials",
+      },
+      {
+        CardID: 3,
+        Description: "The military is requesting more funding.",
+        Option1: "+5 military",
+        Option2: "+5 commerce",
+      },
+    ];
+
+    let usedCards = [];
+
+    function updateSliders() {
+      for (let key in sliders) {
+        const sliderEl = document.getElementById(key);
+        if (sliderEl) sliderEl.innerText = sliders[key];
+        if (sliders[key] <= 0) {
+          alert("Game Over! One of your sliders reached 0.");
+          resetGame();
+        }
+      }
+    }
+
+    document.getElementById("draw-card").addEventListener("click", () => {
+      if (cards.length === usedCards.length) {
+        alert("You win! All cards have been used.");
+        resetGame();
+        return;
+      }
+
+      let card;
+      do {
+        card = cards[Math.floor(Math.random() * cards.length)];
+      } while (usedCards.includes(card.CardID));
+
+      usedCards.push(card.CardID);
+
+      document.getElementById("card-description").innerText = card.Description;
+      document.getElementById("option1").innerText = card.Option1;
+      document.getElementById("option2").innerText = card.Option2;
+
+      document.getElementById("modal").classList.remove("hidden");
+
+      document.getElementById("option1").onclick = () => {
+        applyEffect(card.Option1);
+        closeModal();
+      };
+
+      document.getElementById("option2").onclick = () => {
+        applyEffect(card.Option2);
+        closeModal();
+      };
+    });
+
+    function applyEffect(option) {
+      const matches = option.match(/([+-]\d+) (\w+)/);
+      if (matches) {
+        const [_, value, stat] = matches;
+        sliders[stat.toLowerCase()] += parseInt(value, 10);
+        updateSliders();
+      }
+    }
+
+    function closeModal() {
+      document.getElementById("modal").classList.add("hidden");
+    }
+
+    function resetGame() {
+      sliders = {
+        agrarian: 50,
+        industry: 50,
+        religion: 50,
+        officials: 50,
+        education: 50,
+        commerce: 50,
+        influence: 50,
+        military: 50,
+      };
+      usedCards = [];
+      updateSliders();
+    }
+
+    updateSliders();
+  </script>
 </body>
 </html>
