@@ -8,6 +8,8 @@
 </head>
 <body>
   <h1>Crisis Cards Game</h1>
+
+  <!-- Sliders -->
   <div id="sliders">
     <div>Agrarian: <span id="agrarian">50</span></div>
     <div>Industry: <span id="industry">50</span></div>
@@ -18,9 +20,18 @@
     <div>Influence: <span id="influence">50</span></div>
     <div>Military: <span id="military">50</span></div>
   </div>
+
   <button id="draw-card">Draw Card</button>
 
-  <!-- Modal -->
+  <!-- Initial Popup -->
+  <div id="intro-modal" class="modal hidden">
+    <div class="modal-content">
+      <p>Welcome to Crisis Cards! Make decisions to balance your sliders. Avoid letting any slider drop to 0. Draw cards and choose carefully!</p>
+      <button id="start-game">Start Game</button>
+    </div>
+  </div>
+
+  <!-- Card Modal -->
   <div id="modal" class="modal hidden">
     <div class="modal-content">
       <p id="card-description"></p>
