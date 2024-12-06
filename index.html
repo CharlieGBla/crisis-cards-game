@@ -11,11 +11,13 @@
       padding: 0;
       display: flex;
       height: 100vh;
+      overflow: hidden;
     }
 
     .left, .right {
       flex: 1;
       position: relative;
+      overflow: hidden;
     }
 
     .left {
@@ -66,16 +68,13 @@
       align-items: center;
       text-align: center;
       background: #eee;
-      padding: 20px;
       box-sizing: border-box;
+      padding: 20px;
     }
     .card .front {
       background-image: url('assets/1941 Blondie Comic Playing Card.jpg');
       background-size: cover;
       background-position: center;
-      justify-content: center;
-      align-items: center;
-      /* No text needed here */
     }
     .card .back {
       transform: rotateY(180deg);
@@ -110,6 +109,7 @@
       gap: 20px;
     }
     .slider-row {
+      position: relative;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -127,12 +127,11 @@
       width: 100%;
       height: 15px;
       border-radius: 5px;
-      background: gray;
+      background: green;
       outline: none;
       transition: background 0.3s ease;
       cursor: pointer;
     }
-    /* Slider Thumb */
     .slider::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
@@ -142,6 +141,8 @@
       border-radius: 50%;
       cursor: pointer;
       border: 2px solid #fff;
+      position: relative;
+      z-index: 2;
     }
     .slider::-moz-range-thumb {
       height: 20px;
@@ -150,6 +151,26 @@
       border-radius: 50%;
       cursor: pointer;
       border: 2px solid #fff;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Value Circle */
+    .slider-value-circle {
+      position: absolute;
+      top: -35px;
+      width: 30px;
+      height: 30px;
+      background: #fff;
+      border: 2px solid #000;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 14px;
+      pointer-events: none;
+      transition: left 0.3s ease;
     }
 
     /* Popup Styles */
@@ -165,7 +186,6 @@
     }
     .popup-content {
       position: relative;
-      padding: 20px;
       background: url('assets/dgbuvk6-d93fd397-8bfc-4c22-9797-2681c2d4229e.png') no-repeat center center;
       background-size: contain;
       color: white;
@@ -215,37 +235,46 @@
   <!-- Right Section: Sliders -->
   <div class="right">
     <div class="slider-container">
+      <!-- Each slider row -->
       <div class="slider-row">
         <span class="slider-label">Agrarian</span>
-        <input type="range" class="slider" id="agrarian" value="50" />
+        <input type="range" class="slider" id="agrarian" value="50" min="0" max="100"/>
+        <div class="slider-value-circle" id="agrarian-circle">50</div>
       </div>
       <div class="slider-row">
         <span class="slider-label">Industry</span>
-        <input type="range" class="slider" id="industry" value="50" />
+        <input type="range" class="slider" id="industry" value="50" min="0" max="100"/>
+        <div class="slider-value-circle" id="industry-circle">50</div>
       </div>
       <div class="slider-row">
         <span class="slider-label">Religion</span>
-        <input type="range" class="slider" id="religion" value="50" />
+        <input type="range" class="slider" id="religion" value="50" min="0" max="100"/>
+        <div class="slider-value-circle" id="religion-circle">50</div>
       </div>
       <div class="slider-row">
         <span class="slider-label">Officials</span>
-        <input type="range" class="slider" id="officials" value="50" />
+        <input type="range" class="slider" id="officials" value="50" min="0" max="100"/>
+        <div class="slider-value-circle" id="officials-circle">50</div>
       </div>
       <div class="slider-row">
         <span class="slider-label">Education</span>
-        <input type="range" class="slider" id="education" value="50" />
+        <input type="range" class="slider" id="education" value="50" min="0" max="100"/>
+        <div class="slider-value-circle" id="education-circle">50</div>
       </div>
       <div class="slider-row">
         <span class="slider-label">Commerce</span>
-        <input type="range" class="slider" id="commerce" value="50" />
+        <input type="range" class="slider" id="commerce" value="50" min="0" max="100"/>
+        <div class="slider-value-circle" id="commerce-circle">50</div>
       </div>
       <div class="slider-row">
         <span class="slider-label">Influence</span>
-        <input type="range" class="slider" id="influence" value="50" />
+        <input type="range" class="slider" id="influence" value="50" min="0" max="100"/>
+        <div class="slider-value-circle" id="influence-circle">50</div>
       </div>
       <div class="slider-row">
         <span class="slider-label">Military</span>
-        <input type="range" class="slider" id="military" value="50" />
+        <input type="range" class="slider" id="military" value="50" min="0" max="100"/>
+        <div class="slider-value-circle" id="military-circle">50</div>
       </div>
     </div>
   </div>
@@ -260,7 +289,7 @@
         If it reaches 100, they overthrow you.<br><br>
         Click start to begin.
       </p>
-      <button onclick="startGame()">Start Game</button>
+      <button onclick="beginGame()">Start Game</button>
     </div>
   </div>
 
