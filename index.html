@@ -131,36 +131,33 @@
       outline: none;
       transition: background 0.3s ease;
       cursor: pointer;
+      position: relative;
     }
+
+    /* Hide the default thumb and rely on the circle for visuals */
     .slider::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
       height: 20px;
       width: 20px;
-      background: #000;
-      border-radius: 50%;
+      background: transparent; /* Make thumb transparent */
+      border: none; /* Remove border */
       cursor: pointer;
-      border: 2px solid #fff;
-      position: relative;
       z-index: 2;
     }
     .slider::-moz-range-thumb {
       height: 20px;
       width: 20px;
-      background: #000;
-      border-radius: 50%;
+      background: transparent; /* Make thumb transparent */
+      border: none; /* Remove border */
       cursor: pointer;
-      border: 2px solid #fff;
-      position: relative;
       z-index: 2;
     }
-
+    
     /* Value Circle */
     .slider-value-circle {
       position: absolute;
-      top: -35px;
-      width: 30px;
-      height: 30px;
+      top: 50%;  /* Place circle at vertical center of slider track */
       background: #fff;
       border: 2px solid #000;
       border-radius: 50%;
@@ -170,8 +167,12 @@
       font-weight: bold;
       font-size: 14px;
       pointer-events: none;
+      width: 30px;
+      height: 30px;
+      transform: translate(-50%, -50%); /* Center the circle over handle */
       transition: left 0.3s ease;
     }
+
 
     /* Popup Styles */
     .popup {
