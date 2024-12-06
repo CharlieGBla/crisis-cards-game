@@ -14,9 +14,73 @@ function updateSliders(effects) {
     if (sliders[key] !== undefined) {
       sliders[key] += value;
       sliders[key] = Math.max(0, Math.min(100, sliders[key])); // Clamp between 0 and 100
-      document.getElementById(key).textContent = sliders[key];
+      const sliderElement = document.getElementById(key);
+      sliderElement.textContent = sliders[key];
+
+      // Update slider color
+      if (sliders[key] <= 20 || sliders[key] >= 80) {
+        sliderElement.style.background = "red";
+      } else if (sliders[key] <= 40 || sliders[key] >= 60) {
+        sliderElement.style.background = "yellow";
+      } else {
+        sliderElement.style.background = "green";
+      }
     }
   }
+
+  checkGameOver();
+}
+
+function checkGameOver() {
+  for (const [key, value] of Object.entries(sliders)) {
+    if (value <= 0) {
+      showPopup("Game Over", `The ${key} faction has stormed the keep!`, resetGame);
+      return;
+    } else if (value >= 100) {
+      showPopup("Game Over", `The ${key} faction has overthrown you in a coup!`, resetGame);
+      return;
+    }
+  }
+}
+
+function resetGame() {
+  for (const key in sliders) {
+    sliders[key] = 50;
+    const sliderElement = document.getElementById(key);
+    sliderElement.textContent = sliders[key];
+    sliderElement.style.background = "green";
+  }
+  startPopup();
+}
+
+function showPopup(title, message, callback) {
+  const popup = document.createElement("div");
+  popup.className = "popup";
+  popup.innerHTML = `
+    <div class="popup-content">
+      <h2>${title}</h2>
+      <p>${message}</p>
+      <button onclick="document.body.removeChild(this.parentElement.parentElement); (${callback.toString()})();">OK</button>
+    </div>
+  `;
+  document.body.appendChild(popup);
+}
+
+function startPopup() {
+  const popup = document.createElement("div");
+  popup.className = "popup";
+  popup.id = "start-popup";
+  popup.innerHTML = `
+    <div class="popup-content">
+      <h2>Welcome to the Kingdom Pleaser Game</h2>
+      <p>
+        You are an advisor to a fascist regime. Balance the kingdom’s factions carefully. 
+        If any slider falls to zero, they storm the keep. If it reaches 100, they overthrow you.
+      </p>
+      <button onclick="document.getElementById('start-popup').remove(); startGame();">Start Game</button>
+    </div>
+  `;
+  document.body.appendChild(popup);
 }
 
 async function fetchCards() {
@@ -25,7 +89,7 @@ async function fetchCards() {
   );
   const text = await response.text();
   const rows = text.split("\n").slice(1); // Skip header row
-  return rows.map(row => {
+  return rows.map((row) => {
     const [
       CardID,
       Description,
@@ -111,4 +175,4 @@ async function startGame() {
   });
 }
 
-startGame();
+startPopup();
