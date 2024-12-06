@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Kingdom Pleaser Game</title>
   <style>
     body {
@@ -12,10 +12,12 @@
       display: flex;
       height: 100vh;
     }
+
     .left, .right {
       flex: 1;
       position: relative;
     }
+
     .left {
       display: flex;
       justify-content: center;
@@ -23,6 +25,7 @@
       background: url('assets/Breezehome_-_entrance.webp') no-repeat center center;
       background-size: cover;
     }
+
     .right {
       background: url('assets/skyrim1.webp') no-repeat center center;
       background-size: cover;
@@ -30,8 +33,10 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      padding: 20px;
     }
 
+    /* Card Styles */
     .card-container {
       position: relative;
       width: 250px;
@@ -44,6 +49,7 @@
       position: absolute;
       transform-style: preserve-3d;
       transition: transform 0.6s;
+      cursor: pointer;
     }
     .card .card-side {
       width: 100%;
@@ -56,29 +62,64 @@
       border-radius: 10px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
       text-align: center;
       background: #eee;
+      padding: 20px;
+      box-sizing: border-box;
     }
     .card .front {
       background-image: url('assets/1941 Blondie Comic Playing Card.jpg');
       background-size: cover;
+      background-position: center;
+      justify-content: center;
+      align-items: center;
+      /* No text needed here */
     }
     .card .back {
       transform: rotateY(180deg);
       background-image: url('assets/empty-playing-card-paper-background-line-isolated-white-35082364.jpg');
       background-size: cover;
+      background-position: center;
+      color: #000;
     }
     .card.flipped {
       transform: rotateY(180deg);
     }
+    .back #description {
+      padding: 10px;
+      background: rgba(255,255,255,0.8);
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+    .back button {
+      margin: 5px 0;
+      padding: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      width: 100%;
+    }
 
+    /* Sliders & Labels */
     .slider-container {
-      width: 80%;
+      width: 100%;
+      max-width: 300px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 20px;
+    }
+    .slider-row {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+      width: 100%;
+    }
+    .slider-label {
+      font-size: 16px;
+      color: #fff;
+      text-shadow: 1px 1px 2px #000;
     }
     .slider {
       -webkit-appearance: none;
@@ -89,14 +130,33 @@
       background: gray;
       outline: none;
       transition: background 0.3s ease;
+      cursor: pointer;
+    }
+    /* Slider Thumb */
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 20px;
+      width: 20px;
+      background: #000;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid #fff;
+    }
+    .slider::-moz-range-thumb {
+      height: 20px;
+      width: 20px;
+      background: #000;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid #fff;
     }
 
+    /* Popup Styles */
     .popup {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -104,61 +164,101 @@
       z-index: 10;
     }
     .popup-content {
+      position: relative;
       padding: 20px;
       background: url('assets/dgbuvk6-d93fd397-8bfc-4c22-9797-2681c2d4229e.png') no-repeat center center;
-      background-size: cover;
+      background-size: contain;
       color: white;
       text-align: center;
       border-radius: 10px;
       width: 90%;
       max-width: 400px;
+      box-sizing: border-box;
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+    }
+    .popup-content h2, .popup-content p {
+      background: rgba(0,0,0,0.5);
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
     }
     .popup button {
       margin-top: 20px;
       padding: 10px 20px;
       font-size: 16px;
       cursor: pointer;
+      z-index: 2;
+      position: relative;
     }
   </style>
 </head>
 <body>
-  <!-- Left Section -->
+  <!-- Left Section: Card -->
   <div class="left">
     <div class="card-container">
       <div class="card" id="card">
         <div class="card-side front"></div>
         <div class="card-side back">
           <div id="description"></div>
-          <div>
-            <button id="option1"></button>
-            <button id="option2"></button>
-          </div>
+          <button id="option1"></button>
+          <button id="option2"></button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Right Section -->
+  <!-- Right Section: Sliders -->
   <div class="right">
     <div class="slider-container">
-      <input type="range" class="slider" id="agrarian" value="50" />
-      <input type="range" class="slider" id="industry" value="50" />
-      <input type="range" class="slider" id="religion" value="50" />
-      <input type="range" class="slider" id="officials" value="50" />
-      <input type="range" class="slider" id="education" value="50" />
-      <input type="range" class="slider" id="commerce" value="50" />
-      <input type="range" class="slider" id="influence" value="50" />
-      <input type="range" class="slider" id="military" value="50" />
+      <div class="slider-row">
+        <span class="slider-label">Agrarian</span>
+        <input type="range" class="slider" id="agrarian" value="50" />
+      </div>
+      <div class="slider-row">
+        <span class="slider-label">Industry</span>
+        <input type="range" class="slider" id="industry" value="50" />
+      </div>
+      <div class="slider-row">
+        <span class="slider-label">Religion</span>
+        <input type="range" class="slider" id="religion" value="50" />
+      </div>
+      <div class="slider-row">
+        <span class="slider-label">Officials</span>
+        <input type="range" class="slider" id="officials" value="50" />
+      </div>
+      <div class="slider-row">
+        <span class="slider-label">Education</span>
+        <input type="range" class="slider" id="education" value="50" />
+      </div>
+      <div class="slider-row">
+        <span class="slider-label">Commerce</span>
+        <input type="range" class="slider" id="commerce" value="50" />
+      </div>
+      <div class="slider-row">
+        <span class="slider-label">Influence</span>
+        <input type="range" class="slider" id="influence" value="50" />
+      </div>
+      <div class="slider-row">
+        <span class="slider-label">Military</span>
+        <input type="range" class="slider" id="military" value="50" />
+      </div>
     </div>
   </div>
 
-  <!-- Popup -->
+  <!-- Popup Introduction -->
   <div class="popup" id="start-popup">
     <div class="popup-content">
       <h2>Welcome to the Kingdom Pleaser Game</h2>
       <p>
-        You are an advisor to a fascist regime. Balance the kingdom’s factions carefully. 
-        If any slider falls to zero, they storm the keep. If it reaches 100, they overthrow you.
+        You are an advisor to a fascist regime. Balance the kingdom’s factions carefully.<br>
+        If any slider falls to zero, they storm the keep.<br>
+        If it reaches 100, they overthrow you.<br><br>
+        Click start to begin.
       </p>
       <button onclick="startGame()">Start Game</button>
     </div>
