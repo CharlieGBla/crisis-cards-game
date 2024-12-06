@@ -7,19 +7,35 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      text-align: center;
       margin: 0;
       padding: 0;
+      display: flex;
+      height: 100vh;
     }
-    .slider {
-      width: 50%;
-      margin: 10px auto;
+    .left, .right {
+      flex: 1;
+      position: relative;
     }
+    .left {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: url('assets/Breezehome_-_entrance.webp') no-repeat center center;
+      background-size: cover;
+    }
+    .right {
+      background: url('assets/skyrim1.webp') no-repeat center center;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
     .card-container {
       position: relative;
       width: 250px;
       height: 350px;
-      margin: 20px auto;
       perspective: 1000px;
     }
     .card {
@@ -46,59 +62,108 @@
       background: #eee;
     }
     .card .front {
-      background-image: url('assets/1941 Blondie Comic Playing Card.jpg'); /* Placeholder for front image */
+      background-image: url('assets/1941 Blondie Comic Playing Card.jpg');
       background-size: cover;
     }
     .card .back {
       transform: rotateY(180deg);
-      background-image: url('assets/empty-playing-card-paper-background-line-isolated-white-35082364.jpg'); /* Placeholder for front image */
+      background-image: url('assets/empty-playing-card-paper-background-line-isolated-white-35082364.jpg');
       background-size: cover;
     }
     .card.flipped {
       transform: rotateY(180deg);
     }
-    .back .description {
-      padding: 10px;
-      font-size: 14px;
+
+    .slider-container {
+      width: 80%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
-    .back .options {
-      margin-top: auto;
-      width: 90%;
-    }
-    .back .options button {
+    .slider {
+      -webkit-appearance: none;
+      appearance: none;
       width: 100%;
-      margin: 5px 0;
-      padding: 10px;
-      font-size: 14px;
+      height: 15px;
+      border-radius: 5px;
+      background: gray;
+      outline: none;
+      transition: background 0.3s ease;
+    }
+
+    .popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 10;
+    }
+    .popup-content {
+      padding: 20px;
+      background: url('assets/dgbuvk6-d93fd397-8bfc-4c22-9797-2681c2d4229e.png') no-repeat center center;
+      background-size: cover;
+      color: white;
+      text-align: center;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+    }
+    .popup button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
       cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <h1>Kingdom Pleaser Game</h1>
-  <p id="instructions">Try to keep your sliders balanced! Click the card to start.</p>
-  <div class="card-container">
-    <div class="card" id="card">
-      <div class="card-side front">Draw Card</div>
-      <div class="card-side back">
-        <div class="description" id="description"></div>
-        <div class="options">
-          <button id="option1"></button>
-          <button id="option2"></button>
+  <!-- Left Section -->
+  <div class="left">
+    <div class="card-container">
+      <div class="card" id="card">
+        <div class="card-side front"></div>
+        <div class="card-side back">
+          <div id="description"></div>
+          <div>
+            <button id="option1"></button>
+            <button id="option2"></button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <div>
-    <div class="slider">Agrarian: <span id="agrarian">50</span></div>
-    <div class="slider">Industry: <span id="industry">50</span></div>
-    <div class="slider">Religion: <span id="religion">50</span></div>
-    <div class="slider">Officials: <span id="officials">50</span></div>
-    <div class="slider">Education: <span id="education">50</span></div>
-    <div class="slider">Commerce: <span id="commerce">50</span></div>
-    <div class="slider">Influence: <span id="influence">50</span></div>
-    <div class="slider">Military: <span id="military">50</span></div>
+
+  <!-- Right Section -->
+  <div class="right">
+    <div class="slider-container">
+      <input type="range" class="slider" id="agrarian" value="50" />
+      <input type="range" class="slider" id="industry" value="50" />
+      <input type="range" class="slider" id="religion" value="50" />
+      <input type="range" class="slider" id="officials" value="50" />
+      <input type="range" class="slider" id="education" value="50" />
+      <input type="range" class="slider" id="commerce" value="50" />
+      <input type="range" class="slider" id="influence" value="50" />
+      <input type="range" class="slider" id="military" value="50" />
+    </div>
   </div>
+
+  <!-- Popup -->
+  <div class="popup" id="start-popup">
+    <div class="popup-content">
+      <h2>Welcome to the Kingdom Pleaser Game</h2>
+      <p>
+        You are an advisor to a fascist regime. Balance the kingdom’s factions carefully. 
+        If any slider falls to zero, they storm the keep. If it reaches 100, they overthrow you.
+      </p>
+      <button onclick="startGame()">Start Game</button>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
