@@ -9,79 +9,12 @@ let sliders = {
   military: 50,
 };
 
-function updateSliders(effects) {
-  for (const [key, value] of Object.entries(effects)) {
-    if (sliders[key] !== undefined) {
-      sliders[key] += value;
-      sliders[key] = Math.max(0, Math.min(100, sliders[key])); // Clamp between 0 and 100
-      const sliderElement = document.getElementById(key);
-      sliderElement.textContent = sliders[key];
-
-      // Update slider color
-      if (sliders[key] <= 20 || sliders[key] >= 80) {
-        sliderElement.style.background = "red";
-      } else if (sliders[key] <= 40 || sliders[key] >= 60) {
-        sliderElement.style.background = "yellow";
-      } else {
-        sliderElement.style.background = "green";
-      }
-    }
-  }
-
-  checkGameOver();
-}
-
-function checkGameOver() {
-  for (const [key, value] of Object.entries(sliders)) {
-    if (value <= 0) {
-      showPopup("Game Over", `The ${key} faction has stormed the keep!`, resetGame);
-      return;
-    } else if (value >= 100) {
-      showPopup("Game Over", `The ${key} faction has overthrown you in a coup!`, resetGame);
-      return;
-    }
-  }
-}
-
-function resetGame() {
-  for (const key in sliders) {
-    sliders[key] = 50;
-    const sliderElement = document.getElementById(key);
-    sliderElement.textContent = sliders[key];
-    sliderElement.style.background = "green";
-  }
-  startPopup();
-}
-
-function showPopup(title, message, callback) {
-  const popup = document.createElement("div");
-  popup.className = "popup";
-  popup.innerHTML = `
-    <div class="popup-content">
-      <h2>${title}</h2>
-      <p>${message}</p>
-      <button onclick="document.body.removeChild(this.parentElement.parentElement); (${callback.toString()})();">OK</button>
-    </div>
-  `;
-  document.body.appendChild(popup);
-}
-
-function startPopup() {
-  const popup = document.createElement("div");
-  popup.className = "popup";
-  popup.id = "start-popup";
-  popup.innerHTML = `
-    <div class="popup-content">
-      <h2>Welcome to the Kingdom Pleaser Game</h2>
-      <p>
-        You are an advisor to a fascist regime. Balance the kingdom’s factions carefully. 
-        If any slider falls to zero, they storm the keep. If it reaches 100, they overthrow you.
-      </p>
-      <button onclick="document.getElementById('start-popup').remove(); startGame();">Start Game</button>
-    </div>
-  `;
-  document.body.appendChild(popup);
-}
+let cards = [];
+let gameStarted = false;
+let card = null;
+let descriptionEl = null;
+let option1Btn = null;
+let option2Btn = null;
 
 async function fetchCards() {
   const response = await fetch(
@@ -145,34 +78,151 @@ async function fetchCards() {
   });
 }
 
-async function startGame() {
-  const cards = await fetchCards();
-  const card = document.getElementById("card");
-  const descriptionEl = document.getElementById("description");
-  const option1Btn = document.getElementById("option1");
-  const option2Btn = document.getElementById("option2");
-
-  function drawCard() {
-    const cardData = cards[Math.floor(Math.random() * cards.length)];
-    descriptionEl.textContent = cardData.description;
-    option1Btn.textContent = cardData.option1.text;
-    option2Btn.textContent = cardData.option2.text;
-
-    option1Btn.onclick = () => handleOptionClick(cardData.option1.effects);
-    option2Btn.onclick = () => handleOptionClick(cardData.option2.effects);
+function beginGame() {
+  if (!gameStarted) {
+    document.getElementById('start-popup').style.display = 'none';
+    startGame();
+    gameStarted = true;
   }
-
-  function handleOptionClick(effects) {
-    updateSliders(effects);
-    card.classList.remove("flipped"); // Reset to front
-  }
-
-  card.addEventListener("click", () => {
-    if (!card.classList.contains("flipped")) {
-      drawCard();
-      card.classList.add("flipped"); // Show back
-    }
-  });
 }
 
-startPopup();
+async function startGame() {
+  cards = await fetchCards();
+  card = document.getElementById("card");
+  descriptionEl = document.getElementById("description");
+  option1Btn = document.getElementById("option1");
+  option2Btn = document.getElementById("option2");
+
+  card.addEventListener("click", handleCardClick);
+  updateAllSliders();
+}
+
+function handleCardClick() {
+  if (!card.classList.contains("flipped")) {
+    drawCard();
+    card.classList.add("flipped");
+  }
+}
+
+function drawCard() {
+  const cardData = cards[Math.floor(Math.random() * cards.length)];
+  descriptionEl.textContent = cardData.description;
+  option1Btn.textContent = cardData.option1.text;
+  option2Btn.textContent = cardData.option2.text;
+
+  option1Btn.onclick = () => handleOptionClick(cardData.option1.effects);
+  option2Btn.onclick = () => handleOptionClick(cardData.option2.effects);
+}
+
+function handleOptionClick(effects) {
+  updateSliders(effects);
+
+  // Add a slight delay before flipping back for visual smoothness
+  setTimeout(() => {
+    card.classList.remove("flipped");
+  }, 300);
+}
+
+function updateSliders(effects) {
+  for (const [key, value] of Object.entries(effects)) {
+    if (sliders[key] !== undefined) {
+      sliders[key] += value;
+      sliders[key] = Math.max(0, Math.min(100, sliders[key]));
+    }
+  }
+  updateAllSliders();
+  checkGameOver();
+}
+
+function updateAllSliders() {
+  for (const key in sliders) {
+    const sliderElement = document.getElementById(key);
+    sliderElement.value = sliders[key];
+    const circle = document.getElementById(key + '-circle');
+    circle.textContent = sliders[key];
+
+    // Reposition circle based on slider value
+    positionValueCircle(sliderElement, circle);
+
+    // Update slider color
+    if (sliders[key] <= 20 || sliders[key] >= 80) {
+      sliderElement.style.background = "red";
+    } else if (sliders[key] <= 40 || sliders[key] >= 60) {
+      sliderElement.style.background = "yellow";
+    } else {
+      sliderElement.style.background = "green";
+    }
+  }
+}
+
+function positionValueCircle(sliderElement, circleElement) {
+  const val = parseInt(sliderElement.value);
+  const min = parseInt(sliderElement.min);
+  const max = parseInt(sliderElement.max);
+  const percentage = (val - min) / (max - min);
+  const sliderWidth = sliderElement.offsetWidth;
+  const circleWidth = circleElement.offsetWidth;
+
+  const leftPos = percentage * (sliderWidth - circleWidth) + (circleWidth / 2);
+  circleElement.style.left = (leftPos - (circleWidth / 2)) + 'px';
+}
+
+function checkGameOver() {
+  for (const [key, value] of Object.entries(sliders)) {
+    if (value <= 0) {
+      showPopup("Game Over", `The ${key} faction has stormed the keep!`);
+      return;
+    } else if (value >= 100) {
+      showPopup("Game Over", `The ${key} faction has overthrown you in a coup!`);
+      return;
+    }
+  }
+}
+
+function showPopup(title, message) {
+  const popup = document.createElement("div");
+  popup.className = "popup";
+  popup.innerHTML = `
+    <div class="popup-content">
+      <h2>${title}</h2>
+      <p>${message}</p>
+      <button onclick="closeGameOverPopup(this)">OK</button>
+    </div>
+  `;
+  document.body.appendChild(popup);
+}
+
+function closeGameOverPopup(button) {
+  const popup = button.closest(".popup");
+  popup.remove();
+  resetGame();
+}
+
+function resetGame() {
+  for (const key in sliders) {
+    sliders[key] = 50;
+  }
+  updateAllSliders();
+  // Show the start popup again
+  showStartPopup();
+}
+
+function showStartPopup() {
+  const popup = document.createElement("div");
+  popup.className = "popup";
+  popup.id = "start-popup";
+  popup.innerHTML = `
+    <div class="popup-content">
+      <h2>Welcome to the Kingdom Pleaser Game</h2>
+      <p>
+        You are an advisor to a fascist regime. Balance the kingdom’s factions carefully.<br>
+        If any slider falls to zero, they storm the keep.<br>
+        If it reaches 100, they overthrow you.<br><br>
+        Click start to begin.
+      </p>
+      <button onclick="beginGame()">Start Game</button>
+    </div>
+  `;
+  document.body.appendChild(popup);
+  gameStarted = false;
+}
