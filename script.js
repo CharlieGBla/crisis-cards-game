@@ -192,6 +192,7 @@ function positionValueCircle(sliderElement, circleElement) {
 }
 
 function showIndicators(effects) {
+  console.log("Hover detected, showing indicators...");
   for (const [key, value] of Object.entries(effects)) {
     const indicator = document.getElementById(`${key}-indicator`);
     if (!indicator) continue;
