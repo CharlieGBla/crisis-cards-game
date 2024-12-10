@@ -127,6 +127,9 @@ function drawCard() {
 
   option1Btn.onclick = () => handleOptionClick(cardData.option1.effects);
   option2Btn.onclick = () => handleOptionClick(cardData.option2.effects);
+
+  cardsDrawnCount++;
+  checkWinCondition();
 }
 
 function handleOptionClick(effects) {
