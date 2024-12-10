@@ -1,3 +1,4 @@
+
 let sliders = {
   agrarian: 50,
   industry: 50,
@@ -15,6 +16,11 @@ let card = null;
 let descriptionEl = null;
 let option1Btn = null;
 let option2Btn = null;
+
+let drawnCards = []; // Tracks already drawn cards
+let cardsDrawnCount = 0; // Counts the number of cards drawn
+const WINNING_CARD_COUNT = 10; // Change this to the number of cards required to win
+
 
 async function fetchCards() {
   const response = await fetch(
@@ -47,6 +53,7 @@ async function fetchCards() {
     ] = row.split(",");
 
     return {
+      id: CardID.trim(), // Use this ID to track drawn cards
       description: Description,
       option1: {
         text: Option1,
@@ -105,7 +112,15 @@ function handleCardClick() {
 }
 
 function drawCard() {
-  const cardData = cards[Math.floor(Math.random() * cards.length)];
+  const availableCards = cards.filter(c => !drawnCards.includes(c.id));
+  if (availableCards.length === 0) {
+    // Reshuffle if all cards have been drawn
+    drawnCards = [];
+  }
+  
+  const cardData = availableCards[Math.floor(Math.random() * availableCards.length)];
+  drawnCards.push(cardData.id);
+  
   descriptionEl.textContent = cardData.description;
   option1Btn.textContent = cardData.option1.text;
   option2Btn.textContent = cardData.option2.text;
@@ -120,7 +135,7 @@ function handleOptionClick(effects) {
   // Add a slight delay before flipping back for visual smoothness
   setTimeout(() => {
     card.classList.remove("flipped");
-  }, 300);
+  }, 150);
 }
 
 function updateSliders(effects) {
@@ -170,13 +185,28 @@ function positionValueCircle(sliderElement, circleElement) {
 function checkGameOver() {
   for (const [key, value] of Object.entries(sliders)) {
     if (value <= 0) {
-      showPopup("Game Over", `The ${key} faction has stormed the keep!`);
+      showPopup("Game Over", `The foolish people care too much about ${key} needs, they have ruined what would have been a perfect nation!`);
       return;
     } else if (value >= 100) {
-      showPopup("Game Over", `The ${key} faction has overthrown you in a coup!`);
+      showPopup("Game Over", `In all your time, ${key} needs seemed to be your passion if only their new coup felt the same about you...`);
       return;
     }
   }
+}
+
+function checkWinCondition() {
+  if (cardsDrawnCount >= WINNING_CARD_COUNT) {
+    const score = calculateFinalScore();
+    showPopup("You Win!", `Congratulations! Your final score is ${score}.`);
+  }
+}
+
+function calculateFinalScore() {
+  let score = 0;
+  for (const key in sliders) {
+    score += Math.abs(sliders[key] - 50);
+  }
+  return 400 - score; // 400 is the max score if all sliders are at 50
 }
 
 function showPopup(title, message) {
@@ -186,43 +216,7 @@ function showPopup(title, message) {
     <div class="popup-content">
       <h2>${title}</h2>
       <p>${message}</p>
-      <button onclick="closeGameOverPopup(this)">OK</button>
     </div>
   `;
   document.body.appendChild(popup);
-}
-
-function closeGameOverPopup(button) {
-  const popup = button.closest(".popup");
-  popup.remove();
-  resetGame();
-}
-
-function resetGame() {
-  for (const key in sliders) {
-    sliders[key] = 50;
-  }
-  updateAllSliders();
-  // Show the start popup again
-  showStartPopup();
-}
-
-function showStartPopup() {
-  const popup = document.createElement("div");
-  popup.className = "popup";
-  popup.id = "start-popup";
-  popup.innerHTML = `
-    <div class="popup-content">
-      <h2>Welcome to the Kingdom Pleaser Game</h2>
-      <p>
-        You are an advisor to a fascist regime. Balance the kingdom’s factions carefully.<br>
-        If any slider falls to zero, they storm the keep.<br>
-        If it reaches 100, they overthrow you.<br><br>
-        Click start to begin.
-      </p>
-      <button onclick="beginGame()">Start Game</button>
-    </div>
-  `;
-  document.body.appendChild(popup);
-  gameStarted = false;
 }
