@@ -19,7 +19,7 @@ let option2Btn = null;
 
 let drawnCards = []; // Tracks already drawn cards
 let cardsDrawnCount = 0; // Counts the number of cards drawn
-const WINNING_CARD_COUNT = 10; // Change this to the number of cards required to win
+const WINNING_CARD_COUNT = 25; // Change this to the number of cards required to win
 
 
 async function fetchCards() {
@@ -135,7 +135,6 @@ function drawCard() {
   option2Btn.onmouseout = hideIndicators;
 
   cardsDrawnCount++;
-  checkWinCondition();
 }
 
 function handleOptionClick(effects) {
@@ -156,6 +155,7 @@ function updateSliders(effects) {
   }
   updateAllSliders();
   checkGameOver();
+  checkWinCondition();
 }
 
 function updateAllSliders() {
