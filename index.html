@@ -175,65 +175,61 @@
 
      /* Popup Styles */
     .popup {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: rgba(0, 0, 0, 0.8);
-      z-index: 10;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 10;
     }
     .popup-content {
-      position: relative;
-      background: url('assets/dgbuvk6-d93fd397-8bfc-4c22-9797-2681c2d4229e.png') no-repeat center center;
-      background-size: contain;
-      color: #3c2f2f;
-      text-align: center;
-      border-radius: 10px;
-      width: 80%;
-      max-width: 600px;
-      height: auto;
-      min-height: 90vh;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      padding: 40px 60px;
+        position: relative;
+        background: url('assets/dgbuvk6-d93fd397-8bfc-4c22-9797-2681c2d4229e.png') no-repeat center center;
+        background-size: contain;
+        color: #3c2f2f;
+        border-radius: 10px;
+        width: 80%;
+        max-width: 600px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 40px;
+        overflow-y: auto;
     }
     .popup-content h2 {
-      font-family: 'Old Standard TT', serif;
-      color: #3c2f2f;
-      margin: 20px 0;
-      padding: 20px;
-      background: none;
-      text-shadow: 1px 1px 2px #000;
+        font-family: 'Old Standard TT', serif;
+        color: #3c2f2f;
+        margin: 0 0 20px;
+        text-shadow: 1px 1px 2px #000;
+        font-size: 24px;
     }
     .popup-content p {
-      font-family: 'Old Standard TT', serif;
-      color: #8B0000; /* Stamp red color */
-      margin: 20px 0;
-      padding: 20px;
-      font-size: 18px;
-      line-height: 1.5;
-      text-align: justify;
+        font-family: 'Old Standard TT', serif;
+        color: #8B0000;
+        margin: 0 0 20px;
+        font-size: 16px;
+        line-height: 1.8;
+        text-align: justify;
+        padding: 0 20px;
     }
     .popup button {
-      font-family: 'Old Standard TT', serif;
-      font-size: 16px;
-      cursor: pointer;
-      z-index: 2;
-      position: relative;
-      background-color: #8B0000; /* Stamp red color */
-      color: #fff;
-      border: none;
-      padding: 15px 30px;
-      border-radius: 8px;
-      text-shadow: 1px 1px 2px #000;
-      margin-bottom: 20px;
+        font-family: 'Old Standard TT', serif;
+        font-size: 16px;
+        cursor: pointer;
+        background-color: #8B0000;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-shadow: 1px 1px 2px #000;
+        margin-top: 20px;
+        align-self: center;
     }
-  </style>
+</style>
 </head>
 <body>
   
