@@ -73,13 +73,13 @@
     }
     .card .front {
       background-image: url('assets/1941 Blondie Comic Playing Card.jpg');
-      background-size: contain;
+      background-size: cover;
       background-position: center;
     }
     .card .back {
       transform: rotateY(180deg);
       background-image: url('assets/empty-playing-card-paper-background-line-isolated-white-35082364.jpg');
-      background-size: contain;
+      background-size: cover;
       background-position: center;
       color: #000;
     }
@@ -173,7 +173,7 @@
     }
 
 
-    /* Popup Styles */
+     /* Popup Styles */
     .popup {
       position: fixed;
       top: 0; left: 0;
@@ -194,33 +194,44 @@
       width: 80%;
       max-width: 600px;
       height: auto;
-      min-height: 80vh;
+      min-height: 90vh;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
-      padding: 40px;
+      padding: 40px 60px;
     }
-    .popup-content h2, .popup-content p {
+    .popup-content h2 {
       font-family: 'Old Standard TT', serif;
       color: #3c2f2f;
-      margin: 30px 0;
-      padding: 30px;
+      margin: 20px 0;
+      padding: 20px;
       background: none;
+      text-shadow: 1px 1px 2px #000;
     }
     .popup-content p {
+      font-family: 'Old Standard TT', serif;
+      color: #8B0000; /* Stamp red color */
+      margin: 20px 0;
+      padding: 20px;
       font-size: 18px;
       line-height: 1.5;
+      text-align: justify;
     }
     .popup button {
-      
-      margin-top: 20px;
-      padding: 10px 20px;
+      font-family: 'Old Standard TT', serif;
       font-size: 16px;
       cursor: pointer;
       z-index: 2;
       position: relative;
+      background-color: #8B0000; /* Stamp red color */
+      color: #fff;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 8px;
+      text-shadow: 1px 1px 2px #000;
+      margin-bottom: 20px;
     }
   </style>
 </head>
