@@ -128,6 +128,12 @@ function drawCard() {
   option1Btn.onclick = () => handleOptionClick(cardData.option1.effects);
   option2Btn.onclick = () => handleOptionClick(cardData.option2.effects);
 
+  option1Btn.onmouseover = () => showIndicators(cardData.option1.effects);
+  option1Btn.onmouseout = hideIndicators;
+  
+  option2Btn.onmouseover = () => showIndicators(cardData.option2.effects);
+  option2Btn.onmouseout = hideIndicators;
+
   cardsDrawnCount++;
   checkWinCondition();
 }
@@ -183,6 +189,91 @@ function positionValueCircle(sliderElement, circleElement) {
 
   const leftPos = percentage * (sliderWidth - circleWidth) + (circleWidth / 2);
   circleElement.style.left = (leftPos - (circleWidth / 2)) + 'px';
+}
+
+function showIndicators(effects) {
+  for (const [key, value] of Object.entries(effects)) {
+    const indicator = document.getElementById(`${key}-indicator`);
+    if (!indicator) continue;
+    
+    if (value === 0) {
+      // No effect, hide indicator
+      indicator.style.display = 'none';
+      indicator.className = 'slider-indicator';
+      continue;
+    }
+
+    // Determine direction and color
+    let directionClass = value > 0 ? 'right-arrow' : 'left-arrow';
+    let severityColor;
+    const absVal = Math.abs(value);
+    if (absVal <= 15) {
+      severityColor = 'yellow';
+    } else if (absVal <= 30) {
+      severityColor = 'orange';
+    } else {
+      severityColor = 'red';
+    }
+
+    // Apply classes and inline styles
+    indicator.className = `slider-indicator ${directionClass}`;
+    // Positioning: find the associated circle
+    const circle = document.getElementById(`${key}-circle`);
+    const circleRect = circle.getBoundingClientRect();
+    const indicatorRect = indicator.getBoundingClientRect();
+
+    // Position indicator around the circle
+    // We'll position them absolutely based on direction:
+    // For right arrow: place it a bit to the right of the circle
+    // For left arrow: place it a bit to the left of the circle
+    const parentRect = circle.parentElement.getBoundingClientRect();
+    let leftPos;
+    if (value > 0) {
+      // Right arrow
+      leftPos = circleRect.right - parentRect.left + 10; // 10px to the right
+    } else {
+      // Left arrow
+      leftPos = circleRect.left - parentRect.left - 20; // 20px to the left
+    }
+
+    indicator.style.left = leftPos + 'px';
+    indicator.style.display = 'block';
+
+    // Apply color to the arrow
+    // For right arrow:
+    if (value > 0) {
+      indicator.style.setProperty('--arrow-border-color', severityColor);
+      indicator.style.borderWidth = '5px 0 5px 10px';
+      indicator.style.borderColor = `transparent transparent transparent ${severityColor}`;
+    } else {
+      // Left arrow:
+      indicator.style.setProperty('--arrow-border-color', severityColor);
+      indicator.style.borderWidth = '5px 10px 5px 0';
+      indicator.style.borderColor = `transparent ${severityColor} transparent transparent`;
+    }
+
+    // Instead of using ::before here, we can directly set the border on indicator:
+    // We can just use a small div shaped like a triangle.
+    // Let's simplify by using a separate approach: directly style the triangle using borders:
+    indicator.style.width = '0';
+    indicator.style.height = '0';
+    if (value > 0) {
+      indicator.style.borderStyle = 'solid';
+      indicator.style.borderWidth = '5px 0 5px 10px';
+      indicator.style.borderColor = `transparent transparent transparent ${severityColor}`;
+    } else {
+      indicator.style.borderStyle = 'solid';
+      indicator.style.borderWidth = '5px 10px 5px 0';
+      indicator.style.borderColor = `transparent ${severityColor} transparent transparent`;
+    }
+  }
+}
+
+function hideIndicators() {
+  const indicators = document.querySelectorAll('.slider-indicator');
+  indicators.forEach(indicator => {
+    indicator.style.display = 'none';
+  });
 }
 
 function checkGameOver() {
