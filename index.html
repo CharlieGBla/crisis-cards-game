@@ -171,10 +171,8 @@
       transform: translate(-50%, -50%); /* Center the circle over handle */
       transition: left 0.3s ease;
     }
-
-
-     /* Popup Styles */
-  .popup {
+    /* Popup Styles */
+    .popup {
       position: fixed;
       top: 0;
       left: 0;
@@ -185,8 +183,9 @@
       align-items: center;
       background: rgba(0, 0, 0, 0.8);
       z-index: 10;
-  }
-  .popup-content {
+    }
+    
+    .popup-content {
       position: relative;
       background: url('assets/dgbuvk6-d93fd397-8bfc-4c22-9797-2681c2d4229e.png') no-repeat center center;
       background-size: cover;
@@ -199,27 +198,33 @@
       flex-direction: column;
       justify-content: flex-start;
       align-items: center;
-      padding: 40px;
+      padding: 40px; /* Increased padding for a "letter-like" appearance */
       overflow-y: auto;
-  }
-  .popup-content h2 {
+      border: 10px solid #f4f4f2; /* Optional: creates the "paper" border effect */
+      box-shadow: 0 0 20px rgba(0,0,0,0.5); /* Optional: adds shadow to make it "pop" */
+    }
+    
+    .popup-content h2 {
       font-family: 'Old Standard TT', serif;
       color: #8B0000;
       margin-bottom: 20px;
       text-shadow: 1px 1px 2px #000;
       font-size: 24px;
-  }
-  
-  .popup-content p {
+    }
+    
+    .popup-content p {
       font-family: 'Old Standard TT', serif;
       color: #8B0000;
-      margin-bottom: 20px;
-      font-size: 16px;
-      line-height: 1.8;
-      text-align: justify;
-      padding: 10px 20px;
-  }
-  .popup button {
+      font-size: 18px; /* Slightly larger font for readability */
+      line-height: 1.8; /* Space between lines to make it feel like a letter */
+      text-align: justify; /* Justify the text to give it a "letter" feel */
+      padding: 10px 20px; /* Internal padding for the paragraph itself */
+      margin-bottom: 20px; /* Space between paragraphs */
+      background-color: rgba(255, 255, 255, 0.8); /* Optional: this makes the text stand out */
+      border-radius: 5px; /* Round the paragraph corners */
+    }
+    
+    .popup button {
       font-family: 'Old Standard TT', serif;
       font-size: 16px;
       cursor: pointer;
@@ -231,7 +236,7 @@
       text-shadow: 1px 1px 2px #000;
       margin-top: 20px;
       align-self: center;
-  }
+    }
 </style>
 </head>
 <body>
