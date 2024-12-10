@@ -209,7 +209,7 @@ function calculateFinalScore() {
   for (const key in sliders) {
     score += Math.abs(sliders[key] - 50);
   }
-  return 400 - score; // 400 is the max score if all sliders are at 50
+  return 800 - score; // 400 is the max score if all sliders are at 50
 }
 
 function showPopup(title, message) {
