@@ -100,80 +100,6 @@
       width: 100%;
     }
 
-    /* Sliders & Labels */
-    .slider-container {
-      width: 100%;
-      max-width: 300px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-    .slider-row {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 5px;
-      width: 100%;
-    }
-    .slider-label {
-      font-size: 16px;
-      color: #fff;
-      text-shadow: 1px 1px 2px #000;
-    }
-    .slider {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 100%;
-      height: 15px;
-      border-radius: 5px;
-      background: green;
-      outline: none;
-      transition: background 0.3s ease;
-      cursor: pointer;
-      position: relative;
-    }
-
-    /* Hide the default thumb and rely on the circle for visuals */
-    .slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      height: 20px;
-      width: 20px;
-      background: transparent; /* Make thumb transparent */
-      border: none; /* Remove border */
-      cursor: pointer;
-      z-index: 2;
-    }
-    .slider::-moz-range-thumb {
-      height: 20px;
-      width: 20px;
-      background: transparent; /* Make thumb transparent */
-      border: none; /* Remove border */
-      cursor: pointer;
-      z-index: 2;
-    }
-    
-    /* Value Circle */
-    .slider-value-circle {
-      position: absolute;
-      top: 50%;  /* Place circle at vertical center of slider track */
-      background: #fff;
-      border: 2px solid #000;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-weight: bold;
-      font-size: 14px;
-      pointer-events: none;
-      width: 30px;
-      height: 30px;
-      transform: translate(-50%, -50%); /* Center the circle over handle */
-      transition: left 0.3s ease;
-    }
-
-
     /* Popup Styles */
     .popup {
       position: fixed;
@@ -188,14 +114,15 @@
     .popup-content {
       position: relative;
       background: url('assets/dgbuvk6-d93fd397-8bfc-4c22-9797-2681c2d4229e.png') no-repeat center center;
-      background-size: contain;
-      color: white;
+      background-size: cover;
+      color: #3c2f2f;
       text-align: center;
       border-radius: 10px;
-      width: 90%;
-      max-width: 400px;
+      width: 80%;
+      max-width: 600px;
+      height: auto;
+      min-height: 80vh;
       box-sizing: border-box;
-      min-height: 400px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -203,10 +130,16 @@
       padding: 40px;
     }
     .popup-content h2, .popup-content p {
-      background: rgba(0,0,0,0.5);
-      padding: 10px;
-      border-radius: 5px;
-      margin: 10px 0;
+      font-family: 'Old Standard TT', serif;
+      color: #3c2f2f;
+      margin: 20px 0;
+      padding: 20px;
+      background: none;
+      text-shadow: 1px 1px 2px #000;
+    }
+    .popup-content p {
+      font-size: 18px;
+      line-height: 1.5;
     }
     .popup button {
       margin-top: 20px;
@@ -219,81 +152,20 @@
   </style>
 </head>
 <body>
-  <!-- Left Section: Card -->
-  <div class="left">
-    <div class="card-container">
-      <div class="card" id="card">
-        <div class="card-side front"></div>
-        <div class="card-side back">
-          <div id="description"></div>
-          <button id="option1"></button>
-          <button id="option2"></button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Right Section: Sliders -->
-  <div class="right">
-    <div class="slider-container">
-      <!-- Each slider row -->
-      <div class="slider-row">
-        <span class="slider-label">Agrarian</span>
-        <input type="range" class="slider" id="agrarian" value="50" min="0" max="100"/>
-        <div class="slider-value-circle" id="agrarian-circle">50</div>
-      </div>
-      <div class="slider-row">
-        <span class="slider-label">Industry</span>
-        <input type="range" class="slider" id="industry" value="50" min="0" max="100"/>
-        <div class="slider-value-circle" id="industry-circle">50</div>
-      </div>
-      <div class="slider-row">
-        <span class="slider-label">Religion</span>
-        <input type="range" class="slider" id="religion" value="50" min="0" max="100"/>
-        <div class="slider-value-circle" id="religion-circle">50</div>
-      </div>
-      <div class="slider-row">
-        <span class="slider-label">Officials</span>
-        <input type="range" class="slider" id="officials" value="50" min="0" max="100"/>
-        <div class="slider-value-circle" id="officials-circle">50</div>
-      </div>
-      <div class="slider-row">
-        <span class="slider-label">Education</span>
-        <input type="range" class="slider" id="education" value="50" min="0" max="100"/>
-        <div class="slider-value-circle" id="education-circle">50</div>
-      </div>
-      <div class="slider-row">
-        <span class="slider-label">Commerce</span>
-        <input type="range" class="slider" id="commerce" value="50" min="0" max="100"/>
-        <div class="slider-value-circle" id="commerce-circle">50</div>
-      </div>
-      <div class="slider-row">
-        <span class="slider-label">Influence</span>
-        <input type="range" class="slider" id="influence" value="50" min="0" max="100"/>
-        <div class="slider-value-circle" id="influence-circle">50</div>
-      </div>
-      <div class="slider-row">
-        <span class="slider-label">Military</span>
-        <input type="range" class="slider" id="military" value="50" min="0" max="100"/>
-        <div class="slider-value-circle" id="military-circle">50</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Popup Introduction -->
   <div class="popup" id="start-popup">
     <div class="popup-content">
       <h2>Welcome to the Crisis Cards Game</h2>
       <p>
-        You are an advisor to a fascist regime. Balance the kingdom’s factions carefully.<br>
-        If any slider falls to zero, they storm the keep.<br>
-        If it reaches 100, they overthrow you.<br><br>
-        Click start to begin.
+        You are a peasant who, due to an accidental death and extremely poor record-keeping, has been promoted to royal leader of the Kingdom! 
+        The land is fraught with contention between different groups, and people are delving into chaos.
+        <br><br>
+        Your goal is to fix the land by gaining absolute power! And always remember... morality will not get you very far.
+        <br><br>
+        If you are ready, begin!
       </p>
-      <button onclick="beginGame()">Start Game</button>
+      <button onclick="beginGame()">Begin</button>
     </div>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>
