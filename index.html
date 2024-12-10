@@ -171,6 +171,32 @@
       transform: translate(-50%, -50%); /* Center the circle over handle */
       transition: left 0.3s ease;
     }
+    .slider-indicator {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      /* Start hidden */
+      display: none;
+    }
+    
+    /* Arrow shape using borders */
+    .slider-indicator::before {
+      content: '';
+      display: block;
+      width: 0;
+      height: 0;
+      border-style: solid;
+    }
+    .right-arrow::before {
+      border-width: 5px 0 5px 10px;
+      border-color: transparent transparent transparent red; /* red will be dynamically replaced */
+    }
+    .left-arrow::before {
+      border-width: 5px 10px 5px 0;
+      border-color: transparent red transparent transparent;
+    }
+    
     /* Popup Styles */
     .popup {
       position: fixed;
@@ -261,41 +287,49 @@
         <span class="slider-label">Agrarian</span>
         <input type="range" class="slider" id="agrarian" value="50" min="0" max="100"/>
         <div class="slider-value-circle" id="agrarian-circle">50</div>
+        <div class="slider-indicator" id="agrarian-indicator"></div>
       </div>
       <div class="slider-row">
         <span class="slider-label">Industry</span>
         <input type="range" class="slider" id="industry" value="50" min="0" max="100"/>
         <div class="slider-value-circle" id="industry-circle">50</div>
+        <div class="slider-indicator" id="industry-indicator"></div>
       </div>
       <div class="slider-row">
         <span class="slider-label">Religion</span>
         <input type="range" class="slider" id="religion" value="50" min="0" max="100"/>
         <div class="slider-value-circle" id="religion-circle">50</div>
+        <div class="slider-indicator" id="religion-indicator"></div>
       </div>
       <div class="slider-row">
         <span class="slider-label">Officials</span>
         <input type="range" class="slider" id="officials" value="50" min="0" max="100"/>
         <div class="slider-value-circle" id="officials-circle">50</div>
+        <div class="slider-indicator" id="officials-indicator"></div>
       </div>
       <div class="slider-row">
         <span class="slider-label">Education</span>
         <input type="range" class="slider" id="education" value="50" min="0" max="100"/>
         <div class="slider-value-circle" id="education-circle">50</div>
+        <div class="slider-indicator" id="education-indicator"></div>
       </div>
       <div class="slider-row">
         <span class="slider-label">Commerce</span>
         <input type="range" class="slider" id="commerce" value="50" min="0" max="100"/>
         <div class="slider-value-circle" id="commerce-circle">50</div>
+        <div class="slider-indicator" id="commerce-indicator"></div>
       </div>
       <div class="slider-row">
         <span class="slider-label">Influence</span>
         <input type="range" class="slider" id="influence" value="50" min="0" max="100"/>
         <div class="slider-value-circle" id="influence-circle">50</div>
+        <div class="slider-indicator" id="influence-indicator"></div>
       </div>
       <div class="slider-row">
         <span class="slider-label">Military</span>
         <input type="range" class="slider" id="military" value="50" min="0" max="100"/>
         <div class="slider-value-circle" id="military-circle">50</div>
+        <div class="slider-indicator" id="military-indicator"></div>
       </div>
     </div>
   </div>
