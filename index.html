@@ -13,6 +13,36 @@
       height: 100vh;
       overflow: hidden;
     }
+    #top-info {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999;
+    }
+    .top-letter {
+      background: url('assets/dgbuvk6-d93fd397-8bfc-4c22-9797-2681c2d4229e.png') no-repeat center center;
+      background-size: cover;
+      width: 200px;
+      height: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transform: rotate(-10deg); /* Slight rotation to mimic a letter pinned at an angle */
+      font-family: 'Old Standard TT', serif;
+      color: #8B0000;
+      text-shadow: #fff 1px 0 5px;
+    }  
+    .top-letter p {
+      margin: 5px 0;
+      font-weight: bold;
+      font-size: 16px;
+      text-align: center;
+      background: rgba(255,255,255,0.7);
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
 
     .left, .right {
       flex: 1;
@@ -248,7 +278,13 @@
 </style>
 </head>
 <body>
-  
+  <!-- Top Info (Months and Score) -->
+  <div id="top-info">
+    <div class="top-letter">
+      <p>Months: <span id="months">0</span></p>
+      <p>Score: <span id="score">0</span></p>
+    </div>
+  </div>  
   <!-- Left Section: Card -->
   <div class="left">
     <div class="card-container">
@@ -258,6 +294,7 @@
           <div id="description"></div>
           <button id="option1"></button>
           <button id="option2"></button>
+          <button id="adviseBtn">Advise Me</button>
         </div>
       </div>
     </div>
