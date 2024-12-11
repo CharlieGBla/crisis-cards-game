@@ -1,4 +1,3 @@
-
 let sliders = {
   agrarian: 50,
   industry: 50,
@@ -20,8 +19,22 @@ let adviseBtn = null;
 
 let drawnCards = []; // Tracks already drawn cards
 let cardsDrawnCount = 0; // Counts the number of cards drawn
-const WINNING_CARD_COUNT = 25; // Change this to the number of cards required to win
+const WINNING_CARD_COUNT = 10; 
 
+// New variables for advising mechanic
+let advisedActive = false; // Whether hints are currently enabled
+let isLying = false; // Whether current advice is lying
+let lieChanceBase = 10; // Base 10% chance
+// Each 4 points of discontent = +1% lying chance.
+
+// Calculate discontent:
+function calculateDiscontent() {
+  let total = 0;
+  for (const key in sliders) {
+    total += Math.abs(sliders[key] - 50);
+  }
+  return total; // e.g., if all at 10, each is 40 away from 50 => 40*8=320
+}
 
 async function fetchCards() {
   const response = await fetch(
@@ -54,7 +67,7 @@ async function fetchCards() {
     ] = row.split(",");
 
     return {
-      id: CardID.trim(), // Use this ID to track drawn cards
+      id: CardID.trim(),
       description: Description,
       option1: {
         text: Option1,
@@ -86,23 +99,13 @@ async function fetchCards() {
   });
 }
 
-let advisedActive = false; // Whether hints are currently enabled
-let isLying = false; // Whether current advice is lying
-let lieChanceBase = 10; // Base 10% chance
-
 function beginGame() {
   if (!gameStarted) {
     document.getElementById('start-popup').style.display = 'none';
+    document.getElementById('top-info').style.display = 'block';
     startGame();
     gameStarted = true;
   }
-}
-function calculateDiscontent() {
-  let total = 0;
-  for (const key in sliders) {
-    total += Math.abs(sliders[key] - 50);
-  }
-  return total; // e.g., if all at 10, each is 40 away from 50 => 40*8=320
 }
 
 async function startGame() {
@@ -111,9 +114,11 @@ async function startGame() {
   descriptionEl = document.getElementById("description");
   option1Btn = document.getElementById("option1");
   option2Btn = document.getElementById("option2");
+  adviseBtn = document.getElementById("adviseBtn");
 
   card.addEventListener("click", handleCardClick);
   updateAllSliders();
+  updateTopInfo();
 }
 
 function handleCardClick() {
@@ -140,6 +145,7 @@ function drawCard() {
   option1Btn.onclick = () => handleOptionClick(cardData.option1.effects);
   option2Btn.onclick = () => handleOptionClick(cardData.option2.effects);
 
+  // Only show indicators if advisedActive is true
   option1Btn.onmouseover = () => {
     if (advisedActive) showIndicators(cardData.option1.effects);
   };
@@ -150,16 +156,17 @@ function drawCard() {
   };
   option2Btn.onmouseout = hideIndicators;
 
-  cardsDrawnCount++;
+  // Advise Me button logic
   adviseBtn.onclick = () => advise();
 
+  cardsDrawnCount++;
   updateTopInfo();
   checkWinCondition();
 }
 
 function handleOptionClick(effects) {
   updateSliders(effects);
-  
+
   // End advising after choosing an option
   advisedActive = false;
   isLying = false;
@@ -179,7 +186,6 @@ function updateSliders(effects) {
   }
   updateAllSliders();
   checkGameOver();
-  checkWinCondition();
   updateTopInfo();
 }
 
@@ -190,7 +196,6 @@ function updateAllSliders() {
     const circle = document.getElementById(key + '-circle');
     circle.textContent = sliders[key];
 
-    // Reposition circle based on slider value
     positionValueCircle(sliderElement, circle);
 
     // Update slider color
@@ -311,7 +316,8 @@ function calculateFinalScore() {
   for (const key in sliders) {
     score += Math.abs(sliders[key] - 50);
   }
-  return 800 - score; // 400 is the max score if all sliders are at 50
+  const finalScore = 800 - score; 
+  return finalScore;
 }
 
 function showPopup(title, message) {
@@ -326,6 +332,13 @@ function showPopup(title, message) {
   document.body.appendChild(popup);
 }
 
+// Update months and score display
+function updateTopInfo() {
+  document.getElementById('months').textContent = cardsDrawnCount;
+  document.getElementById('score').textContent = calculateFinalScore();
+}
+
+// Advise mechanic
 function advise() {
   if (advisedActive) {
     // Already advised, do nothing or show a message if you want
@@ -334,6 +347,12 @@ function advise() {
 
   // Determine cost (1-10)
   const cost = Math.floor(Math.random() * 10) + 1;
+  if (sliders.influence < cost) {
+    // Not enough influence
+    // Could show a message if desired
+    return;
+  }
+
   // Pay cost
   sliders.influence -= cost;
   updateAllSliders();
@@ -349,9 +368,4 @@ function advise() {
   // Random check
   const rand = Math.random() * 100; // 0 to 100
   isLying = rand < totalLieChance; 
-}
-
-function updateTopInfo() {
-  document.getElementById('months').textContent = cardsDrawnCount;
-  document.getElementById('score').textContent = calculateFinalScore();
 }
