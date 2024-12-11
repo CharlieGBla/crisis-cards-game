@@ -326,7 +326,7 @@ function calculateFinalScore() {
   for (const key in sliders) {
     score += Math.abs(sliders[key] - 50);
   }
-  const finalScore = 800 - score; 
+  const finalScore = 400 - score; 
   return finalScore;
 }
 
