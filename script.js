@@ -350,3 +350,8 @@ function advise() {
   const rand = Math.random() * 100; // 0 to 100
   isLying = rand < totalLieChance; 
 }
+
+function updateTopInfo() {
+  document.getElementById('months').textContent = cardsDrawnCount;
+  document.getElementById('score').textContent = calculateFinalScore();
+}
