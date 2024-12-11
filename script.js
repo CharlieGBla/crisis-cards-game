@@ -16,6 +16,7 @@ let card = null;
 let descriptionEl = null;
 let option1Btn = null;
 let option2Btn = null;
+let adviseBtn = null;
 
 let drawnCards = []; // Tracks already drawn cards
 let cardsDrawnCount = 0; // Counts the number of cards drawn
@@ -85,12 +86,23 @@ async function fetchCards() {
   });
 }
 
+let advisedActive = false; // Whether hints are currently enabled
+let isLying = false; // Whether current advice is lying
+let lieChanceBase = 10; // Base 10% chance
+
 function beginGame() {
   if (!gameStarted) {
     document.getElementById('start-popup').style.display = 'none';
     startGame();
     gameStarted = true;
   }
+}
+function calculateDiscontent() {
+  let total = 0;
+  for (const key in sliders) {
+    total += Math.abs(sliders[key] - 50);
+  }
+  return total; // e.g., if all at 10, each is 40 away from 50 => 40*8=320
 }
 
 async function startGame() {
@@ -128,17 +140,29 @@ function drawCard() {
   option1Btn.onclick = () => handleOptionClick(cardData.option1.effects);
   option2Btn.onclick = () => handleOptionClick(cardData.option2.effects);
 
-  option1Btn.onmouseover = () => showIndicators(cardData.option1.effects);
+  option1Btn.onmouseover = () => {
+    if (advisedActive) showIndicators(cardData.option1.effects);
+  };
   option1Btn.onmouseout = hideIndicators;
   
-  option2Btn.onmouseover = () => showIndicators(cardData.option2.effects);
+  option2Btn.onmouseover = () => {
+    if (advisedActive) showIndicators(cardData.option2.effects);
+  };
   option2Btn.onmouseout = hideIndicators;
 
   cardsDrawnCount++;
+  adviseBtn.onclick = () => advise();
+
+  updateTopInfo();
+  checkWinCondition();
 }
 
 function handleOptionClick(effects) {
   updateSliders(effects);
+  
+  // End advising after choosing an option
+  advisedActive = false;
+  isLying = false;
 
   // Add a slight delay before flipping back for visual smoothness
   setTimeout(() => {
@@ -156,6 +180,7 @@ function updateSliders(effects) {
   updateAllSliders();
   checkGameOver();
   checkWinCondition();
+  updateTopInfo();
 }
 
 function updateAllSliders() {
@@ -192,19 +217,32 @@ function positionValueCircle(sliderElement, circleElement) {
 }
 
 function showIndicators(effects) {
-  console.log("Hover detected, showing indicators...");
+  // Determine if we should show false info
+  const displayedEffects = {};
   for (const [key, value] of Object.entries(effects)) {
+    displayedEffects[key] = value;
+  }
+
+  // If lying, invert the signs of non-zero effects
+  if (isLying) {
+    for (const [key, value] of Object.entries(displayedEffects)) {
+      // Flip sign if not zero
+      if (value !== 0) displayedEffects[key] = -value;
+    }
+  }
+
+  for (const [key, value] of Object.entries(displayedEffects)) {
     const indicator = document.getElementById(`${key}-indicator`);
     if (!indicator) continue;
     
     if (value === 0) {
-      // No effect, hide indicator
+      // No effect
       indicator.style.display = 'none';
       indicator.className = 'slider-indicator';
       continue;
     }
 
-    // Determine direction and color
+    // Determine direction and color based on displayed (possibly flipped) effects
     let directionClass = value > 0 ? 'right-arrow' : 'left-arrow';
     let severityColor;
     const absVal = Math.abs(value);
@@ -216,57 +254,29 @@ function showIndicators(effects) {
       severityColor = 'red';
     }
 
-    // Apply classes and inline styles
     indicator.className = `slider-indicator ${directionClass}`;
-    // Positioning: find the associated circle
+    // Positioning
     const circle = document.getElementById(`${key}-circle`);
     const circleRect = circle.getBoundingClientRect();
-    const indicatorRect = indicator.getBoundingClientRect();
-
-    // Position indicator around the circle
-    // We'll position them absolutely based on direction:
-    // For right arrow: place it a bit to the right of the circle
-    // For left arrow: place it a bit to the left of the circle
     const parentRect = circle.parentElement.getBoundingClientRect();
     let leftPos;
     if (value > 0) {
       // Right arrow
-      leftPos = circleRect.right - parentRect.left + 10; // 10px to the right
+      leftPos = circleRect.right - parentRect.left + 10;
+      indicator.style.borderWidth = '5px 0 5px 10px';
+      indicator.style.borderColor = `transparent transparent transparent ${severityColor}`;
     } else {
       // Left arrow
-      leftPos = circleRect.left - parentRect.left - 20; // 20px to the left
+      leftPos = circleRect.left - parentRect.left - 20;
+      indicator.style.borderWidth = '5px 10px 5px 0';
+      indicator.style.borderColor = `transparent ${severityColor} transparent transparent`;
     }
 
     indicator.style.left = leftPos + 'px';
     indicator.style.display = 'block';
-
-    // Apply color to the arrow
-    // For right arrow:
-    if (value > 0) {
-      indicator.style.setProperty('--arrow-border-color', severityColor);
-      indicator.style.borderWidth = '5px 0 5px 10px';
-      indicator.style.borderColor = `transparent transparent transparent ${severityColor}`;
-    } else {
-      // Left arrow:
-      indicator.style.setProperty('--arrow-border-color', severityColor);
-      indicator.style.borderWidth = '5px 10px 5px 0';
-      indicator.style.borderColor = `transparent ${severityColor} transparent transparent`;
-    }
-
-    // Instead of using ::before here, we can directly set the border on indicator:
-    // We can just use a small div shaped like a triangle.
-    // Let's simplify by using a separate approach: directly style the triangle using borders:
+    indicator.style.borderStyle = 'solid';
     indicator.style.width = '0';
     indicator.style.height = '0';
-    if (value > 0) {
-      indicator.style.borderStyle = 'solid';
-      indicator.style.borderWidth = '5px 0 5px 10px';
-      indicator.style.borderColor = `transparent transparent transparent ${severityColor}`;
-    } else {
-      indicator.style.borderStyle = 'solid';
-      indicator.style.borderWidth = '5px 10px 5px 0';
-      indicator.style.borderColor = `transparent ${severityColor} transparent transparent`;
-    }
   }
 }
 
@@ -314,4 +324,29 @@ function showPopup(title, message) {
     </div>
   `;
   document.body.appendChild(popup);
+}
+
+function advise() {
+  if (advisedActive) {
+    // Already advised, do nothing or show a message if you want
+    return;
+  }
+
+  // Determine cost (1-10)
+  const cost = Math.floor(Math.random() * 10) + 1;
+  // Pay cost
+  sliders.influence -= cost;
+  updateAllSliders();
+
+  advisedActive = true;
+  // Calculate lying chance
+  const discontent = calculateDiscontent(); 
+  // Each 4 points = +1% lie chance
+  const additionalChance = discontent / 4; 
+  const totalLieChance = lieChanceBase + additionalChance; // base 10% + discontent factor
+  // totalLieChance is in percent, e.g., if discontent=320, additionalChance=80%, total=90%
+  
+  // Random check
+  const rand = Math.random() * 100; // 0 to 100
+  isLying = rand < totalLieChance; 
 }
