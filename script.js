@@ -161,7 +161,6 @@ function drawCard() {
 
   cardsDrawnCount++;
   updateTopInfo();
-  checkWinCondition();
 }
 
 function handleOptionClick(effects) {
@@ -175,6 +174,7 @@ function handleOptionClick(effects) {
   setTimeout(() => {
     card.classList.remove("flipped");
   }, 150);
+  checkWinCondition();
 }
 
 function updateSliders(effects) {
