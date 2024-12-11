@@ -295,10 +295,16 @@ function hideIndicators() {
 function checkGameOver() {
   for (const [key, value] of Object.entries(sliders)) {
     if (value <= 0) {
-      showPopup("Game Over", `The foolish people care too much about ${key} needs, they have ruined what would have been a perfect nation!`);
+      showPopup("A Silent Revolt",
+        `Your Grace, it seems the masses have confused 'majority opinion' with 'correct opinion.' Foolish as ever. 
+        They didn’t like how you managed the kingdom's ${key}, their audacity! To think they know better than you?
+        No need to struggle, Your Grace. I’ll make sure you’re remembered fondly.`);
       return;
     } else if (value >= 100) {
-      showPopup("Game Over", `In all your time, ${key} needs seemed to be your passion if only their new coup felt the same about you...`);
+      showPopup("The Overbearing Faction",
+        `Your Grace, look what you’ve done. The kingdom’s ${key} is stronger than ever, But therein lies the problem.
+        Power has a habit of outgrowing its master, and the council has already made its decision. 
+        I offered to handle it personally, as a gesture of loyalty. It’s the least I can do for you.`);
       return;
     }
   }
@@ -307,7 +313,11 @@ function checkGameOver() {
 function checkWinCondition() {
   if (cardsDrawnCount >= WINNING_CARD_COUNT) {
     const score = calculateFinalScore();
-    showPopup("You Win!", `Congratulations! Your final score is ${score}.`);
+    showPopup("A Fragile Peace", 
+              `You see, Majesty? This is what happens when you trust yourself. 
+              The kingdom is balanced, the people are loyal, and power rests comfortably in your hands.
+              No one did this but you and they’ll always remember that! After all, the victory is yours.
+              Your perfect score: ${score}`);
   }
 }
 
