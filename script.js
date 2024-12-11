@@ -19,7 +19,7 @@ let adviseBtn = null;
 
 let drawnCards = []; // Tracks already drawn cards
 let cardsDrawnCount = 0; // Counts the number of cards drawn
-const WINNING_CARD_COUNT = 10; 
+const WINNING_CARD_COUNT = 12; 
 
 // New variables for advising mechanic
 let advisedActive = false; // Whether hints are currently enabled
