@@ -316,7 +316,7 @@ function checkWinCondition() {
     showPopup("A Fragile Peace", 
               `You see, Majesty? This is what happens when you trust yourself. 
               The kingdom is balanced, the people are loyal, and power rests comfortably in your hands.
-              No one did this but you and they’ll always remember that! After all, the victory is yours.
+              No one did this but you and they’ll always remember that! After all, the victory is yours. <brk>
               Your perfect score: ${score}`);
   }
 }
